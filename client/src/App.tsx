@@ -10,7 +10,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/Personal-Portfolio/" component={Home} />
       <Route component={NotFound} />
     </Switch>
   );
