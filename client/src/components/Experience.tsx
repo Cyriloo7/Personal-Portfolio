@@ -72,52 +72,53 @@ export function Experience() {
           </p>
         </div>
 
-        <div className="relative">
-          {/* Timeline Line */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-96 bg-gradient-to-b from-primary to-secondary rounded-full" />
+        <div className="relative max-w-4xl mx-auto">
+          {/* Current Experience - Centered */}
+          <div className="flex justify-center">
+            <div className="w-full max-w-3xl">
+              <div className="glass rounded-3xl p-8 hover-tilt transition-all duration-300">
+                <div className="text-center mb-6">
+                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r ${
+                    experiences[currentIndex].color === 'primary' 
+                      ? 'from-primary to-blue-600' 
+                      : 'from-secondary to-purple-600'
+                  } mb-4`}>
+                    <i className={`fas ${
+                      experiences[currentIndex].title.includes('Developer') ? 'fa-code' :
+                      experiences[currentIndex].title.includes('Research') || experiences[currentIndex].title.includes('Intern') ? 'fa-flask' :
+                      experiences[currentIndex].title.includes('BTech') ? 'fa-graduation-cap' :
+                      'fa-briefcase'
+                    } text-2xl text-white`} />
+                  </div>
+                  <h3 className={`text-2xl font-bold text-${experiences[currentIndex].color} mb-3`}>
+                    {experiences[currentIndex].title}
+                  </h3>
+                  <p className="text-xl text-gray-200 mb-2">
+                    {experiences[currentIndex].company}
+                  </p>
+                  <p className="text-sm text-gray-400 mb-6">{experiences[currentIndex].period}</p>
+                </div>
+                
+                <div className="text-center">
+                  <p className="text-gray-300 leading-relaxed text-lg">
+                    {experiences[currentIndex].description}
+                  </p>
+                </div>
 
-          {/* Current Experience */}
-          <div className="space-y-12">
-            <div className="relative flex items-center justify-between">
-              {experiences[currentIndex].side === "left" ? (
-                <>
-                  <div className="w-5/12 text-right animate-slide-in-left">
-                    <div className="glass rounded-2xl p-6 hover-tilt">
-                      <h3 className={`text-xl font-bold text-${experiences[currentIndex].color} mb-2`}>
-                        {experiences[currentIndex].title}
-                      </h3>
-                      <p className="text-gray-300 mb-2">
-                        {experiences[currentIndex].company}
-                      </p>
-                      <p className="text-sm text-gray-400">{experiences[currentIndex].period}</p>
-                      <p className="text-gray-300 mt-3">
-                        {experiences[currentIndex].description}
-                      </p>
-                    </div>
-                  </div>
-                  <div className={`absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-${experiences[currentIndex].color} rounded-full border-4 border-white shadow-lg`} />
-                  <div className="w-5/12" />
-                </>
-              ) : (
-                <>
-                  <div className="w-5/12" />
-                  <div className={`absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-${experiences[currentIndex].color} rounded-full border-4 border-white shadow-lg`} />
-                  <div className="w-5/12 animate-slide-in-right">
-                    <div className="glass rounded-2xl p-6 hover-tilt">
-                      <h3 className={`text-xl font-bold text-${experiences[currentIndex].color} mb-2`}>
-                        {experiences[currentIndex].title}
-                      </h3>
-                      <p className="text-gray-300 mb-2">
-                        {experiences[currentIndex].company}
-                      </p>
-                      <p className="text-sm text-gray-400">{experiences[currentIndex].period}</p>
-                      <p className="text-gray-300 mt-3">
-                        {experiences[currentIndex].description}
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
+                {/* Role Badge */}
+                <div className="flex justify-center mt-6">
+                  <span className={`px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r ${
+                    experiences[currentIndex].color === 'primary' 
+                      ? 'from-primary/20 to-blue-600/20 text-primary border border-primary/30' 
+                      : 'from-secondary/20 to-purple-600/20 text-secondary border border-secondary/30'
+                  }`}>
+                    {experiences[currentIndex].title.includes('Developer') ? 'Development Role' :
+                     experiences[currentIndex].title.includes('Research') || experiences[currentIndex].title.includes('Intern') ? 'Research & Innovation' :
+                     experiences[currentIndex].title.includes('BTech') ? 'Academic Achievement' :
+                     'Professional Experience'}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
