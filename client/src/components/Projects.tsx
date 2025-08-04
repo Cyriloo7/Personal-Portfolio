@@ -69,6 +69,14 @@ const projects = [
     tags: ["MLOps", "CI/CD", "Docker", "git", "DVC", "mlruns"],
     github: "https://github.com/Cyriloo7/First_MLOps_Project",
   },
+  {
+    title: "Image Similarity Finder",
+    description:
+      "This repository contains two Python scripts that leverage a pretrained Vision Transformer (ViT) model to perform image similarity tasks. The first script uses the ViT model to extract features from images, while the second script compares these features to find similar images.",
+    image: firstmlopsimg,
+    tags: ["Python", "AI", "ML", "git", "Clustering"],
+    github: "https://github.com/Cyriloo7/Image-Similarity.git",
+  },
 ];
 
 export function Projects() {
@@ -118,10 +126,15 @@ export function Projects() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects
-            .slice(currentPage * projectsPerPage, (currentPage + 1) * projectsPerPage)
+            .slice(
+              currentPage * projectsPerPage,
+              (currentPage + 1) * projectsPerPage
+            )
             .map((project, displayIndex) => {
-              const originalIndex = currentPage * projectsPerPage + displayIndex;
-              const { primary, secondary } = colorPalette[originalIndex % colorPalette.length];
+              const originalIndex =
+                currentPage * projectsPerPage + displayIndex;
+              const { primary, secondary } =
+                colorPalette[originalIndex % colorPalette.length];
               return (
                 <div
                   key={project.title}
@@ -177,28 +190,36 @@ export function Projects() {
         {totalPages > 1 && (
           <div className="flex justify-center items-center mt-12 space-x-4">
             <button
-              onClick={() => setCurrentPage(currentPage > 0 ? currentPage - 1 : totalPages - 1)}
+              onClick={() =>
+                setCurrentPage(
+                  currentPage > 0 ? currentPage - 1 : totalPages - 1
+                )
+              }
               className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
               data-testid="button-projects-previous"
             >
               <ChevronLeft className="w-6 h-6 text-primary group-hover:text-white" />
             </button>
-            
+
             <div className="flex space-x-2">
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentPage(index)}
                   className={`w-3 h-3 rounded-full transition-all ${
-                    index === currentPage ? 'bg-primary' : 'bg-white/30'
+                    index === currentPage ? "bg-primary" : "bg-white/30"
                   }`}
                   data-testid={`button-projects-dot-${index}`}
                 />
               ))}
             </div>
-            
+
             <button
-              onClick={() => setCurrentPage(currentPage < totalPages - 1 ? currentPage + 1 : 0)}
+              onClick={() =>
+                setCurrentPage(
+                  currentPage < totalPages - 1 ? currentPage + 1 : 0
+                )
+              }
               className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
               data-testid="button-projects-next"
             >
