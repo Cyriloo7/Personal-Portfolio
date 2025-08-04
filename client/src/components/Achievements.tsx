@@ -1,6 +1,7 @@
 import { useIntersectionObserver } from "../hooks/use-intersection-observer";
 import { useCounter } from "../hooks/use-counter";
 import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import clubimg from "../assets/achievements/aiml-bionary-club-achievement.jpg";
 import topPerformerImg from "../assets/achievements/ResoluteAI-Software-Private-Limitedachievement-1.jpg";
 import graduationImg from "../assets/achievements/btech-graduation-achievement-2.jpg";
@@ -106,6 +107,9 @@ export function Achievements() {
     type: string;
     open: boolean;
   }>({ url: "", type: "", open: false });
+  const [currentPage, setCurrentPage] = useState(0);
+  const achievementsPerPage = 3;
+  const totalPages = Math.ceil(achievements.length / achievementsPerPage);
 
   const openModal = (url: string, type: string) =>
     setModalData({ url, type, open: true });
@@ -168,42 +172,80 @@ export function Achievements() {
 
           {/* Achievements */}
           <div className="grid md:grid-cols-3 gap-8">
-            {achievements.map((achievement) => (
-              <div
-                key={achievement.title}
-                className="glass rounded-3xl p-6 hover-tilt"
-              >
-                <div className="flex items-center mb-4">
-                  <i
-                    className={`${achievement.icon} text-2xl ${achievement.color} mr-4`}
-                  />
-                  <h3 className={`text-xl font-bold ${achievement.color}`}>
-                    {achievement.title}
-                  </h3>
+            {achievements
+              .slice(currentPage * achievementsPerPage, (currentPage + 1) * achievementsPerPage)
+              .map((achievement, displayIndex) => (
+                <div
+                  key={achievement.title}
+                  className="glass rounded-3xl p-6 hover-tilt"
+                  data-testid={`card-achievement-${currentPage * achievementsPerPage + displayIndex}`}
+                >
+                  <div className="flex items-center mb-4">
+                    <i
+                      className={`${achievement.icon} text-2xl ${achievement.color} mr-4`}
+                    />
+                    <h3 className={`text-xl font-bold ${achievement.color}`}>
+                      {achievement.title}
+                    </h3>
+                  </div>
+                  <p className="text-gray-300 mb-4">{achievement.description}</p>
+                  {achievement.media && (
+                    <button
+                      onClick={() =>
+                        achievement.media!.url.startsWith("http")
+                          ? window.open(
+                              achievement.media!.url,
+                              "_blank",
+                              "noopener"
+                            )
+                          : openModal(
+                              achievement.media!.url,
+                              achievement.media!.type
+                            )
+                      }
+                      className="mt-2 text-sm underline"
+                      data-testid={`button-achievement-view-${currentPage * achievementsPerPage + displayIndex}`}
+                    >
+                      View
+                    </button>
+                  )}
                 </div>
-                <p className="text-gray-300 mb-4">{achievement.description}</p>
-                {achievement.media && (
-                  <button
-                    onClick={() =>
-                      achievement.media!.url.startsWith("http")
-                        ? window.open(
-                            achievement.media!.url,
-                            "_blank",
-                            "noopener"
-                          )
-                        : openModal(
-                            achievement.media!.url,
-                            achievement.media!.type
-                          )
-                    }
-                    className="mt-2 text-sm underline"
-                  >
-                    View
-                  </button>
-                )}
-              </div>
-            ))}
+              ))}
           </div>
+
+          {/* Navigation Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center mt-12 space-x-4">
+              <button
+                onClick={() => setCurrentPage(currentPage > 0 ? currentPage - 1 : totalPages - 1)}
+                className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
+                data-testid="button-achievements-previous"
+              >
+                <ChevronLeft className="w-6 h-6 text-primary group-hover:text-white" />
+              </button>
+              
+              <div className="flex space-x-2">
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentPage(index)}
+                    className={`w-3 h-3 rounded-full transition-all ${
+                      index === currentPage ? 'bg-primary' : 'bg-white/30'
+                    }`}
+                    data-testid={`button-achievements-dot-${index}`}
+                  />
+                ))}
+              </div>
+              
+              <button
+                onClick={() => setCurrentPage(currentPage < totalPages - 1 ? currentPage + 1 : 0)}
+                className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
+                data-testid="button-achievements-next"
+              >
+                <ChevronRight className="w-6 h-6 text-primary group-hover:text-white" />
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

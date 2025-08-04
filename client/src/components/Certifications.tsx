@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useIntersectionObserver } from "../hooks/use-intersection-observer";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 // Certificates
 import MLOpsFoundationsPdf from "../assets/certificates/MLOps Foundations.pdf";
 import GenerativeAIllmPdf from "../assets/certificates/Generative AI with Large Language Models.pdf";
@@ -107,6 +108,9 @@ export function Certifications() {
     type: "",
     open: false,
   });
+  const [currentPage, setCurrentPage] = useState(0);
+  const certificationsPerPage = 6;
+  const totalPages = Math.ceil(certifications.length / certificationsPerPage);
 
   const openModal = (url: string, type: string) =>
     setModalData({ url, type, open: true });
@@ -132,36 +136,74 @@ export function Certifications() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {certifications.map((cert) => (
-              <div
-                key={cert.title}
-                className="glass rounded-3xl p-6 hover-tilt magnetic relative"
-              >
-                <div className="text-center mb-4">
-                  <i className={`${cert.icon} text-4xl ${cert.color} mb-4`} />
-                  <h3 className={`text-xl font-bold ${cert.color} mb-1`}>
-                    {cert.title}
-                  </h3>
-                  <h5 className="text-sm text-gray-400 mb-2">{cert.date}</h5>
-                  <p className="italic text-gray-300 mb-2">{cert.issuer}</p>
-                  <p className="text-gray-300">{cert.description}</p>
-                </div>
-
-                {/* View button */}
-                <button
-                  onClick={() =>
-                    openModal(
-                      cert.file,
-                      cert.file.toLowerCase().endsWith(".pdf") ? "pdf" : "image"
-                    )
-                  }
-                  className="mt-4 text-sm underline"
+            {certifications
+              .slice(currentPage * certificationsPerPage, (currentPage + 1) * certificationsPerPage)
+              .map((cert, displayIndex) => (
+                <div
+                  key={cert.title}
+                  className="glass rounded-3xl p-6 hover-tilt magnetic relative"
+                  data-testid={`card-certification-${currentPage * certificationsPerPage + displayIndex}`}
                 >
-                  View Certificate
-                </button>
-              </div>
-            ))}
+                  <div className="text-center mb-4">
+                    <i className={`${cert.icon} text-4xl ${cert.color} mb-4`} />
+                    <h3 className={`text-xl font-bold ${cert.color} mb-1`}>
+                      {cert.title}
+                    </h3>
+                    <h5 className="text-sm text-gray-400 mb-2">{cert.date}</h5>
+                    <p className="italic text-gray-300 mb-2">{cert.issuer}</p>
+                    <p className="text-gray-300">{cert.description}</p>
+                  </div>
+
+                  {/* View button */}
+                  <button
+                    onClick={() =>
+                      openModal(
+                        cert.file,
+                        cert.file.toLowerCase().endsWith(".pdf") ? "pdf" : "image"
+                      )
+                    }
+                    className="mt-4 text-sm underline"
+                    data-testid={`button-certification-view-${currentPage * certificationsPerPage + displayIndex}`}
+                  >
+                    View Certificate
+                  </button>
+                </div>
+              ))}
           </div>
+
+          {/* Navigation Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center mt-12 space-x-4">
+              <button
+                onClick={() => setCurrentPage(currentPage > 0 ? currentPage - 1 : totalPages - 1)}
+                className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
+                data-testid="button-certifications-previous"
+              >
+                <ChevronLeft className="w-6 h-6 text-primary group-hover:text-white" />
+              </button>
+              
+              <div className="flex space-x-2">
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentPage(index)}
+                    className={`w-3 h-3 rounded-full transition-all ${
+                      index === currentPage ? 'bg-primary' : 'bg-white/30'
+                    }`}
+                    data-testid={`button-certifications-dot-${index}`}
+                  />
+                ))}
+              </div>
+              
+              <button
+                onClick={() => setCurrentPage(currentPage < totalPages - 1 ? currentPage + 1 : 0)}
+                className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
+                data-testid="button-certifications-next"
+              >
+                <ChevronRight className="w-6 h-6 text-primary group-hover:text-white" />
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
