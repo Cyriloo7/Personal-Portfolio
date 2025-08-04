@@ -202,7 +202,7 @@ function FocusView() {
             } blur-xl scale-105 opacity-60`}></div>
             
             {/* Main Experience Card */}
-            <div className="relative glass rounded-3xl p-12 hover-tilt transition-all duration-500 border border-white/10 backdrop-blur-xl shadow-2xl">
+            <div className="relative glass rounded-3xl p-12 hover-tilt hover:scale-105 transition-all duration-500 border border-white/10 backdrop-blur-xl shadow-2xl hover:shadow-3xl">
               {/* Header Section */}
               <div className="text-center mb-8">
                 {/* Enhanced Icon */}
@@ -242,7 +242,7 @@ function FocusView() {
               
               {/* Enhanced Description Section */}
               <div className="text-center max-w-4xl mx-auto">
-                <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-sm">
+                <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
                   <p className="text-gray-200 leading-relaxed text-xl font-light tracking-wide">
                     {experiences[currentIndex].description}
                   </p>
@@ -271,7 +271,7 @@ function FocusView() {
               
               {/* Progress Indicator */}
               <div className="flex justify-center mt-8">
-                <div className="bg-white/10 rounded-full px-6 py-2 backdrop-blur-sm">
+                <div className="bg-white/10 rounded-full px-6 py-2 backdrop-blur-sm hover:bg-white/20 transition-all duration-300">
                   <span className="text-gray-300 text-sm font-medium">
                     {currentIndex + 1} of {experiences.length}
                   </span>
