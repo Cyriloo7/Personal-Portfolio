@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useIntersectionObserver } from "../hooks/use-intersection-observer";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import deepfaceimg from "../assets/portfolio/deepfake-detection.jpg";
 import collisionimg from "../assets/portfolio/collision-detection.jpg";
 import fakenewsimg from "../assets/portfolio/fake-news-classifier.jpg";
@@ -68,11 +69,22 @@ const projects = [
     tags: ["MLOps", "CI/CD", "Docker", "git", "DVC", "mlruns"],
     github: "https://github.com/Cyriloo7/First_MLOps_Project",
   },
+  {
+    title: "Image Similarity Finder",
+    description:
+      "This repository contains two Python scripts that leverage a pretrained Vision Transformer (ViT) model to perform image similarity tasks. The first script uses the ViT model to extract features from images, while the second script compares these features to find similar images.",
+    image: firstmlopsimg,
+    tags: ["Python", "AI", "ML", "git", "Clustering"],
+    github: "https://github.com/Cyriloo7/Image-Similarity.git",
+  },
 ];
 
 export function Projects() {
   const { ref, isIntersecting } = useIntersectionObserver();
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const projectsPerPage = 6;
+  const totalPages = Math.ceil(projects.length / projectsPerPage);
 
   const handleMouseMove = (
     e: React.MouseEvent<HTMLDivElement>,
@@ -113,57 +125,108 @@ export function Projects() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => {
-            const { primary, secondary } =
-              colorPalette[index % colorPalette.length];
-            return (
-              <div
-                key={project.title}
-                className="glass rounded-3xl p-6 hover-tilt magnetic transition-transform duration-300"
-                onMouseMove={(e) => handleMouseMove(e, index)}
-                onMouseEnter={() => setHoveredProject(index)}
-                onMouseLeave={handleMouseLeave}
-              >
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-48 object-cover rounded-2xl mb-6"
-                />
-                <h3
-                  className="text-xl font-bold mb-3"
-                  style={{ color: primary }}
+          {projects
+            .slice(
+              currentPage * projectsPerPage,
+              (currentPage + 1) * projectsPerPage
+            )
+            .map((project, displayIndex) => {
+              const originalIndex =
+                currentPage * projectsPerPage + displayIndex;
+              const { primary, secondary } =
+                colorPalette[originalIndex % colorPalette.length];
+              return (
+                <div
+                  key={project.title}
+                  className="glass rounded-3xl p-6 hover-tilt magnetic transition-transform duration-300"
+                  onMouseMove={(e) => handleMouseMove(e, originalIndex)}
+                  onMouseEnter={() => setHoveredProject(originalIndex)}
+                  onMouseLeave={handleMouseLeave}
+                  data-testid={`card-project-${originalIndex}`}
                 >
-                  {project.title}
-                </h3>
-                <p className="mb-4 text-gray-300">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 text-xs rounded-full"
-                      style={{
-                        color: primary,
-                        backgroundColor: "#ffffff10",
-                        border: `1px solid ${primary}`,
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex justify-between items-center">
-                  <a
-                    href={project.github}
-                    className="transition-colors text-primary"
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-48 object-cover rounded-2xl mb-6"
+                  />
+                  <h3
+                    className="text-xl font-bold mb-3"
+                    style={{ color: primary }}
                   >
-                    <i className="fab fa-github mr-2" />
-                    View Code
-                  </a>
+                    {project.title}
+                  </h3>
+                  <p className="mb-4 text-gray-300">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 text-xs rounded-full"
+                        style={{
+                          color: primary,
+                          backgroundColor: "#ffffff10",
+                          border: `1px solid ${primary}`,
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <a
+                      href={project.github}
+                      className="transition-colors text-primary"
+                      data-testid={`link-project-github-${originalIndex}`}
+                    >
+                      <i className="fab fa-github mr-2" />
+                      View Code
+                    </a>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
+
+        {/* Navigation Controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center mt-12 space-x-4">
+            <button
+              onClick={() =>
+                setCurrentPage(
+                  currentPage > 0 ? currentPage - 1 : totalPages - 1
+                )
+              }
+              className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
+              data-testid="button-projects-previous"
+            >
+              <ChevronLeft className="w-6 h-6 text-primary group-hover:text-white" />
+            </button>
+
+            <div className="flex space-x-2">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    index === currentPage ? "bg-primary" : "bg-white/30"
+                  }`}
+                  data-testid={`button-projects-dot-${index}`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={() =>
+                setCurrentPage(
+                  currentPage < totalPages - 1 ? currentPage + 1 : 0
+                )
+              }
+              className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
+              data-testid="button-projects-next"
+            >
+              <ChevronRight className="w-6 h-6 text-primary group-hover:text-white" />
+            </button>
+          </div>
+        )}
 
         <div className="text-center mt-12">
           <a
