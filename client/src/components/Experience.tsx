@@ -72,74 +72,119 @@ export function Experience() {
           </p>
         </div>
 
-        <div className="relative max-w-4xl mx-auto">
-          {/* Current Experience - Centered */}
+        <div className="relative max-w-6xl mx-auto">
+          {/* Current Experience - Enhanced Prominent Design */}
           <div className="flex justify-center">
-            <div className="w-full max-w-3xl">
-              <div className="glass rounded-3xl p-8 hover-tilt transition-all duration-300">
-                <div className="text-center mb-6">
-                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r ${
-                    experiences[currentIndex].color === 'primary' 
-                      ? 'from-primary to-blue-600' 
-                      : 'from-secondary to-purple-600'
-                  } mb-4`}>
-                    <i className={`fas ${
-                      experiences[currentIndex].title.includes('Developer') ? 'fa-code' :
-                      experiences[currentIndex].title.includes('Research') || experiences[currentIndex].title.includes('Intern') ? 'fa-flask' :
-                      experiences[currentIndex].title.includes('BTech') ? 'fa-graduation-cap' :
-                      'fa-briefcase'
-                    } text-2xl text-white`} />
-                  </div>
-                  <h3 className={`text-2xl font-bold text-${experiences[currentIndex].color} mb-3`}>
-                    {experiences[currentIndex].title}
-                  </h3>
-                  <p className="text-xl text-gray-200 mb-2">
-                    {experiences[currentIndex].company}
-                  </p>
-                  <p className="text-sm text-gray-400 mb-6">{experiences[currentIndex].period}</p>
-                </div>
+            <div className="w-full max-w-5xl">
+              <div className="relative">
+                {/* Background Glow Effect */}
+                <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r ${
+                  experiences[currentIndex].color === 'primary' 
+                    ? 'from-primary/20 via-blue-500/20 to-cyan-500/20' 
+                    : 'from-secondary/20 via-purple-500/20 to-pink-500/20'
+                } blur-xl scale-105 opacity-60`}></div>
                 
-                <div className="text-center">
-                  <p className="text-gray-300 leading-relaxed text-lg">
-                    {experiences[currentIndex].description}
-                  </p>
-                </div>
+                {/* Main Experience Card */}
+                <div className="relative glass rounded-3xl p-12 hover-tilt transition-all duration-500 border border-white/10 backdrop-blur-xl shadow-2xl">
+                  {/* Header Section */}
+                  <div className="text-center mb-8">
+                    {/* Enhanced Icon */}
+                    <div className={`inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br ${
+                      experiences[currentIndex].color === 'primary' 
+                        ? 'from-primary via-blue-500 to-cyan-500' 
+                        : 'from-secondary via-purple-500 to-pink-500'
+                    } mb-6 shadow-2xl ring-4 ring-white/20 hover:scale-110 transition-transform duration-300`}>
+                      <i className={`fas ${
+                        experiences[currentIndex].title.includes('Developer') ? 'fa-code' :
+                        experiences[currentIndex].title.includes('Research') || experiences[currentIndex].title.includes('Intern') ? 'fa-flask' :
+                        experiences[currentIndex].title.includes('BTech') ? 'fa-graduation-cap' :
+                        'fa-briefcase'
+                      } text-3xl text-white drop-shadow-lg`} />
+                    </div>
+                    
+                    {/* Enhanced Title */}
+                    <h3 className={`text-4xl font-bold mb-4 bg-gradient-to-r ${
+                      experiences[currentIndex].color === 'primary' 
+                        ? 'from-primary via-blue-400 to-cyan-400' 
+                        : 'from-secondary via-purple-400 to-pink-400'
+                    } bg-clip-text text-transparent leading-tight`}>
+                      {experiences[currentIndex].title}
+                    </h3>
+                    
+                    {/* Enhanced Company */}
+                    <p className="text-2xl text-gray-100 mb-3 font-medium">
+                      {experiences[currentIndex].company}
+                    </p>
+                    
+                    {/* Enhanced Period with Icon */}
+                    <div className="flex items-center justify-center space-x-2 mb-8">
+                      <i className="fas fa-calendar-alt text-gray-400"></i>
+                      <p className="text-lg text-gray-400 font-medium">{experiences[currentIndex].period}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Enhanced Description Section */}
+                  <div className="text-center max-w-4xl mx-auto">
+                    <div className="bg-white/5 rounded-2xl p-8 border border-white/10 backdrop-blur-sm">
+                      <p className="text-gray-200 leading-relaxed text-xl font-light tracking-wide">
+                        {experiences[currentIndex].description}
+                      </p>
+                    </div>
+                  </div>
 
-                {/* Role Badge */}
-                <div className="flex justify-center mt-6">
-                  <span className={`px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r ${
-                    experiences[currentIndex].color === 'primary' 
-                      ? 'from-primary/20 to-blue-600/20 text-primary border border-primary/30' 
-                      : 'from-secondary/20 to-purple-600/20 text-secondary border border-secondary/30'
-                  }`}>
-                    {experiences[currentIndex].title.includes('Developer') ? 'Development Role' :
-                     experiences[currentIndex].title.includes('Research') || experiences[currentIndex].title.includes('Intern') ? 'Research & Innovation' :
-                     experiences[currentIndex].title.includes('BTech') ? 'Academic Achievement' :
-                     'Professional Experience'}
-                  </span>
+                  {/* Enhanced Role Badge */}
+                  <div className="flex justify-center mt-8">
+                    <span className={`px-8 py-4 rounded-2xl text-lg font-semibold bg-gradient-to-r ${
+                      experiences[currentIndex].color === 'primary' 
+                        ? 'from-primary/30 to-blue-600/30 text-primary border-2 border-primary/50 shadow-lg shadow-primary/25' 
+                        : 'from-secondary/30 to-purple-600/30 text-secondary border-2 border-secondary/50 shadow-lg shadow-secondary/25'
+                    } backdrop-blur-sm hover:scale-105 transition-transform duration-300`}>
+                      <i className={`fas ${
+                        experiences[currentIndex].title.includes('Developer') ? 'fa-laptop-code' :
+                        experiences[currentIndex].title.includes('Research') || experiences[currentIndex].title.includes('Intern') ? 'fa-lightbulb' :
+                        experiences[currentIndex].title.includes('BTech') ? 'fa-medal' :
+                        'fa-star'
+                      } mr-3`}></i>
+                      {experiences[currentIndex].title.includes('Developer') ? 'Development Excellence' :
+                       experiences[currentIndex].title.includes('Research') || experiences[currentIndex].title.includes('Intern') ? 'Research & Innovation' :
+                       experiences[currentIndex].title.includes('BTech') ? 'Academic Achievement' :
+                       'Professional Experience'}
+                    </span>
+                  </div>
+                  
+                  {/* Progress Indicator */}
+                  <div className="flex justify-center mt-8">
+                    <div className="bg-white/10 rounded-full px-6 py-2 backdrop-blur-sm">
+                      <span className="text-gray-300 text-sm font-medium">
+                        {currentIndex + 1} of {experiences.length}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Navigation Controls */}
+          {/* Enhanced Navigation Controls */}
           {experiences.length > 1 && (
-            <div className="flex justify-center items-center mt-12 space-x-4">
+            <div className="flex justify-center items-center mt-16 space-x-6">
               <button
                 onClick={() => setCurrentIndex(currentIndex > 0 ? currentIndex - 1 : experiences.length - 1)}
-                className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
+                className="p-4 glass rounded-2xl hover:bg-white/20 transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110 border border-white/20"
                 data-testid="button-experience-previous"
               >
-                <ChevronLeft className="w-6 h-6 text-primary group-hover:text-white" />
+                <ChevronLeft className="w-8 h-8 text-primary group-hover:text-white transition-colors duration-300" />
               </button>
               
-              <div className="flex space-x-2">
+              <div className="flex space-x-3 bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/20">
                 {experiences.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
-                    className={`w-3 h-3 rounded-full transition-all ${
-                      index === currentIndex ? 'bg-primary' : 'bg-white/30'
+                    className={`w-4 h-4 rounded-full transition-all duration-300 hover:scale-125 ${
+                      index === currentIndex 
+                        ? 'bg-gradient-to-r from-primary to-secondary shadow-lg' 
+                        : 'bg-white/40 hover:bg-white/60'
                     }`}
                     data-testid={`button-experience-dot-${index}`}
                   />
@@ -148,10 +193,10 @@ export function Experience() {
               
               <button
                 onClick={() => setCurrentIndex(currentIndex < experiences.length - 1 ? currentIndex + 1 : 0)}
-                className="p-3 glass rounded-full hover:bg-white/10 transition-all group"
+                className="p-4 glass rounded-2xl hover:bg-white/20 transition-all duration-300 group shadow-lg hover:shadow-xl hover:scale-110 border border-white/20"
                 data-testid="button-experience-next"
               >
-                <ChevronRight className="w-6 h-6 text-primary group-hover:text-white" />
+                <ChevronRight className="w-8 h-8 text-primary group-hover:text-white transition-colors duration-300" />
               </button>
             </div>
           )}
