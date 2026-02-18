@@ -2,7 +2,7 @@
   'use strict';
 
   // ----- Data -----
-  const typewriterPhrases = ['AI Engineer', 'ML Enthusiast', 'Deep Learning Developer', 'NLP Practitioner'];
+  const typewriterPhrases = ['AI Engineer', 'ML Enthusiast', 'GenAI Practitioner', 'NLP Practitioner'];
   const technicalSkills = [
     { name: 'Python', percentage: 95 },
     { name: 'Machine Learning', percentage: 90 },
@@ -27,19 +27,61 @@
     { title: 'Image Similarity Finder', description: 'Python scripts using a pretrained Vision Transformer (ViT) to extract features and find similar images.', image: 'public/img/portfolio/llmops-project.jpg', tags: ['Python', 'AI', 'ML', 'git', 'Clustering'], github: 'https://github.com/Cyriloo7/Image-Similarity.git', color: '#20c997' }
   ];
   const experiences = [
-    { title: 'Junior Python Developer', company: 'Webfolks, Mannarkkad, India', period: 'Feb 2025 - Present', description: 'Developed pipelines to preprocess, validate, and transform large-scale AI/ML datasets for object detection, segmentation, and keypoint labeling; built automation tools and lightweight AI models to accelerate annotation review and correction; integrated custom pretrained models into CVAT and Label-Studio; and deployed Dockerized utilities to boost labeling speed, accuracy, and consistency.', icon: 'fa-code', badge: 'Development Excellence' },
-    { title: 'Research Intern', company: 'National University of Singapore (NUS), Singapore', period: 'Feb 2024 - Aug 2024', description: 'Developed VR therapy using music and immersive environments, enhancing stress reduction by 20%. Achieved a 30% relaxation rate for patients using AI-driven approaches with multimodal sensor data.', icon: 'fa-flask', badge: 'Research & Innovation' },
-    { title: 'Big Data Analysis Using Deep Learning Intern', company: 'National University of Singapore (NUS), Singapore', period: 'Dec 2023 - Jan 2024', description: 'Utilized T5-small and Pegasus models to generate legal verdicts efficiently. Focused on data processing, feature engineering, and machine learning algorithms.', icon: 'fa-flask', badge: 'Research & Innovation' },
-    { title: 'Artificial Intelligence Extern', company: 'Smart Bridge, Chennai, India', period: 'Feb 2024 - Aug 2024', description: 'Built a ship classification model using VGG16 with transfer learning techniques. Achieved 78.1% accuracy on the training set and 76.67% on the test set.', icon: 'fa-briefcase', badge: 'Professional Experience' },
-    { title: 'BTech Computer Science', company: 'Vellore Institute of Technology', period: '2020 - 2024', description: 'BTech CSE Core with strong interest in AI/ML which focuses on deep learning, computer vision, and natural language processing.', icon: 'fa-graduation-cap', badge: 'Academic Achievement' }
-  ];
-  const stats = [
-    { icon: 'fas fa-award', value: 7, label: 'Certifications' },
-    { icon: 'fas fa-trophy', value: 3, label: 'Achievements' },
-    { icon: 'fab fa-github', value: 21, label: 'Repositories', link: 'https://github.com/Cyriloo7?tab=repositories' },
-    { icon: 'fas fa-graduation-cap', value: 4, label: 'Years Education' }
+    {
+      title: 'AIML Engineer',
+      company: 'Webfolks, Mannarkkad, India',
+      period: 'Jan 1 2026 - Present',
+      description: 'Building and deploying AI/ML solutions end-to-end: dataset curation and validation, model training and evaluation, integration into internal annotation and review workflows, and lightweight automation to improve speed, quality, and consistency.',
+      icon: 'fas fa-brain',
+      badge: 'AI/ML Engineering',
+      attachments: [
+        { title: 'Promotion', file: 'public/img/resume/promotion-webfolks.jpeg' }
+      ]
+    },
+    {
+      title: 'Junior Python Developer',
+      company: 'Webfolks, Mannarkkad, India',
+      period: 'Feb 2025 - Dec 2025',
+      description: 'Developed pipelines to preprocess, validate, and transform large-scale AI/ML datasets for object detection, segmentation, and keypoint labeling; built automation tools and lightweight AI models to accelerate annotation review and correction; integrated custom pretrained models into CVAT and Label-Studio; and deployed Dockerized utilities to boost labeling speed, accuracy, and consistency.',
+      icon: 'fas fa-code',
+      badge: 'Development Excellence',
+      attachments: [
+        { title: 'Junior Python Developer', file: 'public/img/resume/junior python developer.jpg' }
+      ]
+    },
+    {
+      title: 'Research Intern',
+      company: 'National University of Singapore (NUS), Singapore',
+      period: 'Feb 2024 - Aug 2024',
+      description: 'Developed VR therapy using music and immersive environments, enhancing stress reduction by 20%. Achieved a 30% relaxation rate for patients using AI-driven approaches with multimodal sensor data.',
+      icon: 'fas fa-flask',
+      badge: 'Research & Innovation',
+      attachments: [
+        { title: 'NUS', file: 'public/img/resume/nus.jpg' }
+      ]
+    },
+    {
+      title: 'Big Data Analysis Using Deep Learning Intern',
+      company: 'National University of Singapore (NUS), Singapore',
+      period: 'Dec 2023 - Jan 2024',
+      description: 'Utilized T5-small and Pegasus models to generate legal verdicts efficiently. Focused on data processing, feature engineering, and machine learning algorithms.',
+      icon: 'fas fa-database',
+      badge: 'Research & Innovation',
+      attachments: [
+        { title: 'Internship', file: 'public/img/resume/Big Data Analysis using Deep Learning - nus.jpg' }
+      ]
+    },
+    {
+      title: 'Artificial Intelligence Extern',
+      company: 'Smart Bridge, Chennai, India',
+      period: 'Feb 2024 - Aug 2024',
+      description: 'Built a ship classification model using VGG16 with transfer learning techniques. Achieved 78.1% accuracy on the training set and 76.67% on the test set.',
+      icon: 'fas fa-briefcase',
+      badge: 'Professional Experience'
+    }
   ];
   const achievements = [
+    { icon: 'fas fa-trophy', title: 'Best Performer Award — Webfolks', description: 'Recognized as Best Performer at Webfolks for strong delivery, consistency, and impact in day-to-day development and automation work.', media: 'public/img/achievements/best-performer-award-webfolks.jpeg' },
     { icon: 'fas fa-medal', title: 'Top Performer in AI Solutioning', description: 'Recognized as one of the top 6-15 performers out of 800+ applicants in the AI Solutioning assignment with ResoluteAI Software Private Limited.', media: 'public/img/achievements/ResoluteAI-Software-Private-Limitedachievement-1.jpg' },
     { icon: 'fas fa-code-branch', title: 'Open Source Contributor', description: 'Active contributor to machine learning projects on GitHub with multiple repositories and collaborations.', link: 'https://github.com/Cyriloo7?tab=repositories' },
     { icon: 'fas fa-graduation-cap', title: 'B.Tech Graduation', description: 'Proud to graduate from Vellore Institute of Technology (VIT) with a B.Tech in Computer Science and Engineering.', media: 'public/img/achievements/btech-graduation-achievement-2.jpg' },
@@ -55,6 +97,42 @@
     { icon: 'fab fa-google', title: 'Artificial Intelligence Powered by Google Developers', date: 'Mar 2023 – Jul 2023', issuer: 'Smart Bridge', description: 'Practical experience in AI, cloud technologies, TensorFlow models, and NLP.', file: 'public/img/certificates/Artificial Intelligence Powered by Google Developers.pdf', color: '#ef4444' }
   ];
 
+  const education = [
+    {
+      period: '09/2020 - 04/2024',
+      location: 'Chennai, India',
+      title: 'BTech in Computer Science and Engineering',
+      institute: 'Vellore Institute of Technology',
+      scoreLabel: 'CGPA',
+      scoreValue: '7.87/10',
+      media: { title: 'Graduation', file: 'public/img/resume/btech-graduation-achievement-2.jpg' }
+    },
+    {
+      period: '2018 - 2020',
+      location: 'Anakkal, Kerala',
+      title: '11th to 12th',
+      institute: 'St. Antony\'s public school',
+      scoreLabel: 'Percentage',
+      scoreValue: '90%',
+      media: { title: 'School document', file: 'public/img/resume/high-school.jpg' }
+    },
+    {
+      period: '2018',
+      location: 'Sreekrishnapuram, Kerala',
+      title: '10th',
+      institute: 'St. Dominics convent english medium school',
+      scoreLabel: 'Percentage',
+      scoreValue: '88%',
+      media: { title: 'School document', file: 'public/img/resume/st-dominics.jpg' }
+    }
+  ];
+
+  const stats = [
+    { icon: 'fas fa-award', value: certifications.length, label: 'Certifications' },
+    { icon: 'fas fa-trophy', value: achievements.length, label: 'Achievements' },
+    { icon: 'fab fa-github', value: 21, label: 'Repositories', link: 'https://github.com/Cyriloo7?tab=repositories' },
+    { icon: 'fas fa-graduation-cap', value: 4, label: 'Years Education' }
+  ];
   const PROJECTS_PER_PAGE = 6;
   const ACHIEVEMENTS_PER_PAGE = 3;
   const CERTS_PER_PAGE = 6;
@@ -134,7 +212,107 @@
 
   // ----- Experience: Timeline only -----
   function setupExperience() {
-    // Timeline view is always visible, no toggle needed
+    renderExperienceTimeline();
+  }
+
+  function getFileType(filePath) {
+    return String(filePath || '').toLowerCase().endsWith('.pdf') ? 'pdf' : 'image';
+  }
+
+  function renderExperienceTimeline() {
+    const timeline = document.getElementById('experienceTimeline');
+    if (!timeline) return;
+
+    timeline.innerHTML = experiences.map(function (e) {
+      const date = e.period || '';
+      const attachments = Array.isArray(e.attachments) ? e.attachments : [];
+      const attachmentsHtml = attachments.length
+        ? '<div class="timeline-attachments">' +
+          '<span class="timeline-attachments-label">Attachments</span>' +
+          attachments.map(function (a) {
+            const url = a.file || '';
+            const type = getFileType(url);
+            return '<button type="button" class="timeline-attachment-btn" data-url="' + escapeHtml(url) + '" data-type="' + escapeHtml(type) + '">' +
+              '<i class="fas ' + (type === 'pdf' ? 'fa-file-pdf' : 'fa-image') + '"></i>' +
+              '<span>' + escapeHtml(a.title || 'View') + '</span>' +
+              '</button>';
+          }).join('') +
+          '</div>'
+        : '';
+
+      return '<article class="timeline-item">' +
+        '<div class="timeline-node" aria-hidden="true"></div>' +
+        '<div class="timeline-card">' +
+        '<div class="timeline-card-glow"></div>' +
+        '<div class="timeline-card-head">' +
+        '<div class="timeline-icon"><i class="' + escapeHtml(e.icon || 'fas fa-briefcase') + '"></i></div>' +
+        '<div class="timeline-meta">' +
+        '<span class="timeline-date">' + escapeHtml(date) + '</span>' +
+        '<h3>' + escapeHtml(e.title || '') + '</h3>' +
+        '<p class="timeline-company">' + escapeHtml(e.company || '') + '</p>' +
+        '</div></div>' +
+        '<p class="timeline-desc">' + escapeHtml(e.description || '') + '</p>' +
+        (e.badge ? '<span class="timeline-badge">' + escapeHtml(e.badge) + '</span>' : '') +
+        attachmentsHtml +
+        '</div>' +
+        '</article>';
+    }).join('');
+
+    timeline.querySelectorAll('.timeline-attachment-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        openModal(this.dataset.url, this.dataset.type);
+      });
+    });
+  }
+
+  // ----- Education -----
+  function renderEducation() {
+    const grid = document.getElementById('educationGrid');
+    if (!grid) return;
+
+    grid.innerHTML = education.map(function (e) {
+      const media = e.media && e.media.file ? e.media : null;
+      const type = media ? getFileType(media.file) : 'image';
+
+      const thumb = media
+        ? (type === 'pdf'
+          ? '<div class="education-thumb education-thumb--pdf"><i class="fas fa-file-pdf" aria-hidden="true"></i></div>'
+          : '<div class="education-thumb"><img src="' + escapeHtml(media.file) + '" alt="" loading="lazy" /></div>')
+        : '<div class="education-thumb education-thumb--pdf"><i class="fas fa-graduation-cap" aria-hidden="true"></i></div>';
+
+      const metaLine = [
+        e.period ? '<span class="education-meta-item"><i class="fas fa-calendar-alt"></i>' + escapeHtml(e.period) + '</span>' : '',
+        e.location ? '<span class="education-meta-item"><i class="fas fa-location-dot"></i>' + escapeHtml(e.location) + '</span>' : ''
+      ].filter(Boolean).join('');
+
+      const scoreLine = (e.scoreLabel && e.scoreValue)
+        ? '<p class="education-score"><span class="education-score-label">' + escapeHtml(e.scoreLabel) + ':</span> <span class="education-score-value">' + escapeHtml(e.scoreValue) + '</span></p>'
+        : '';
+
+      const viewBtn = media
+        ? '<button type="button" class="education-view" data-url="' + escapeHtml(media.file) + '" data-type="' + escapeHtml(type) + '">' +
+          '<span>View</span><i class="fas fa-arrow-right"></i>' +
+          '</button>'
+        : '';
+
+      return '<article class="education-card glass-card">' +
+        '<div class="education-card-glow" aria-hidden="true"></div>' +
+        thumb +
+        '<div class="education-body">' +
+        (metaLine ? '<div class="education-meta">' + metaLine + '</div>' : '') +
+        '<h3 class="education-title">' + escapeHtml(e.title || '') + '</h3>' +
+        '<p class="education-institute">' + escapeHtml(e.institute || '') + '</p>' +
+        scoreLine +
+        (viewBtn ? '<div class="education-actions">' + viewBtn + '</div>' : '') +
+        '</div>' +
+        '</article>';
+    }).join('');
+
+    grid.querySelectorAll('.education-view').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        openModal(this.dataset.url, this.dataset.type);
+      });
+    });
   }
 
   // ----- Projects -----
@@ -544,6 +722,7 @@
   setupNav();
   setupSectionVisibility();
   setupExperience();
+  renderEducation();
   renderProjects();
   renderSkills();
   renderAchievements();
