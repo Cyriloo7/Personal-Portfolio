@@ -1,4 +1,4 @@
-/* ===== Cinematic design system ===== */
+﻿/* ===== Cinematic design system ===== */
 :root {
   --bg: #060608;
   --bg-2: #0c0c0f;
@@ -51,6 +51,45 @@ body {
   pointer-events: none;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== Initial Page Loader ===== */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s var(--ease-out-expo), visibility 0.8s;
+}
+
+.page-loader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-terminal {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.loader-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.2em;
+  background-color: var(--accent);
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
 }
 
 .cinema-vignette {
@@ -282,7 +321,7 @@ body {
 .block-num {
   position: absolute;
   top: var(--space-lg);
-  left: 2rem; /* fixed from viewport so 01–07 align in same column (section is full width) */
+  left: 2rem; /* fixed from viewport so 01â€“07 align in same column (section is full width) */
   font-family: var(--font-mono);
   font-weight: 500;
   font-size: clamp(3rem, 10vw, 6rem);
@@ -376,6 +415,16 @@ body {
   z-index: 1;
 }
 
+/* Canvas for Particles */
+.particles-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -436,11 +485,43 @@ body {
   letter-spacing: -0.045em;
   margin: 0 0 0.75rem;
   color: var(--text);
-  opacity: 0;
-  animation: heroFadeUp 1s var(--ease-out-expo) 0.25s forwards, heroFloat 6s ease-in-out 1.5s infinite;
   text-shadow:
     0 2px 24px rgba(0, 0, 0, 0.4),
     0 0 60px rgba(0, 212, 170, 0.08);
+}
+
+.hero-name.staggered-reveal {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-name.staggered-reveal span {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(20px) scale(0.9);
+  animation: heroLetterReveal 0.8s var(--ease-out-expo) forwards;
+}
+
+/* Add staggered delays to the 10 characters (including space) in "Cyril Jose" */
+.hero-name.staggered-reveal span:nth-child(1) { animation-delay: 0.20s; }
+.hero-name.staggered-reveal span:nth-child(2) { animation-delay: 0.24s; }
+.hero-name.staggered-reveal span:nth-child(3) { animation-delay: 0.28s; }
+.hero-name.staggered-reveal span:nth-child(4) { animation-delay: 0.32s; }
+.hero-name.staggered-reveal span:nth-child(5) { animation-delay: 0.36s; }
+.hero-name.staggered-reveal span:nth-child(6) { animation-delay: 0.40s; width: 0.3em; } /* Space */
+.hero-name.staggered-reveal span:nth-child(7) { animation-delay: 0.44s; }
+.hero-name.staggered-reveal span:nth-child(8) { animation-delay: 0.48s; }
+.hero-name.staggered-reveal span:nth-child(9) { animation-delay: 0.52s; }
+.hero-name.staggered-reveal span:nth-child(10) { animation-delay: 0.56s; }
+
+@keyframes heroLetterReveal {
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
 }
 
 .hero-role {
@@ -493,7 +574,7 @@ body {
   }
 }
 
-/* Continuous fluid float – gentle vertical + micro horizontal */
+/* Continuous fluid float â€“ gentle vertical + micro horizontal */
 @keyframes heroFloat {
   0%, 100% {
     transform: translateY(0) translateX(0);
@@ -606,10 +687,43 @@ body {
   transform: translateX(0);
 }
 
-.about-premium-img-frame {
+/* Avatar spin ring wrapper â€” sits outside the clipping frame */
+.about-avatar-ring-wrap {
   position: relative;
   width: 100%;
   max-width: 380px;
+}
+
+/* Spinning conic-gradient ring */
+.about-avatar-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 24px;
+  background: conic-gradient(
+    var(--accent) 0deg,
+    var(--accent-2) 120deg,
+    transparent 180deg,
+    transparent 240deg,
+    var(--accent) 360deg
+  );
+  animation: avatarRingSpin 12s linear infinite;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.section.visible .about-avatar-ring {
+  opacity: 1;
+}
+
+@keyframes avatarRingSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.about-premium-img-frame {
+  position: relative;
+  width: 100%;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -635,12 +749,24 @@ body {
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
   opacity: 0;
   z-index: -1;
-  filter: blur(20px);
-  transition: opacity 0.4s;
+  filter: blur(24px);
+  transition: opacity 0.5s;
+  animation: aboutGlowPulse 3.5s ease-in-out infinite;
+}
+
+/* Always-on subtle glow pulse â€” amplifies on hover */
+@keyframes aboutGlowPulse {
+  0%, 100% { opacity: 0.10; filter: blur(24px); }
+  50%       { opacity: 0.22; filter: blur(30px); }
 }
 
 .about-premium-img-frame:hover .about-premium-img-glow {
-  opacity: 0.3;
+  animation: aboutGlowPulseHover 1.8s ease-in-out infinite;
+}
+
+@keyframes aboutGlowPulseHover {
+  0%, 100% { opacity: 0.28; filter: blur(24px); }
+  50%       { opacity: 0.48; filter: blur(36px); }
 }
 
 .about-premium-badge {
@@ -735,16 +861,9 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.7s var(--ease-out-expo) 0.2s, transform 0.7s var(--ease-out-expo) 0.2s;
 }
 
-.section.visible .about-premium-info {
-  opacity: 1;
-  transform: translateY(0);
-}
-
+/* Each chip floats in staggered on section visible */
 .about-premium-info-item {
   display: flex;
   align-items: flex-start;
@@ -755,13 +874,29 @@ body {
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
-  transition: border-color 0.25s, background 0.25s, transform 0.25s;
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(4px);
+  transition:
+    opacity 0.65s var(--ease-out-expo),
+    transform 0.65s var(--ease-out-expo),
+    filter 0.65s var(--ease-out-expo),
+    border-color 0.25s,
+    background 0.25s;
 }
+
+.section.visible .about-premium-info-item:nth-child(1) { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.20s; }
+.section.visible .about-premium-info-item:nth-child(2) { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.32s; }
+.section.visible .about-premium-info-item:nth-child(3) { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.44s; }
+.section.visible .about-premium-info-item:nth-child(4) { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.56s; }
+.section.visible .about-premium-info-item:nth-child(5) { opacity:1; transform:translateY(0); filter:blur(0); transition-delay: 0.68s; }
+
 
 .about-premium-info-item:hover {
   border-color: rgba(0, 212, 170, 0.25);
   background: rgba(0, 212, 170, 0.05);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 212, 170, 0.08);
 }
 
 .about-premium-info-item i {
@@ -869,11 +1004,7 @@ body {
 }
 
 /* ===== Experience: modern interactive design ===== */
-.experience-section.experience-modern {
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 170, 0.02) 50%, transparent 100%);
-}
-
-.experience-section.experience-modern .wrap {
+.experience-section .wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -882,7 +1013,7 @@ body {
 .experience-section.experience-modern .timeline-view { align-self: stretch; }
 
 .experience-header { margin-bottom: 2.5rem; text-align: center; }
-.experience-section.experience-modern .experience-header .block-title { margin-bottom: 0.5rem; }
+.experience-section .experience-header .block-title { margin-bottom: 0.5rem; }
 
 .experience-subtitle {
   font-size: 1.08rem;
@@ -1297,6 +1428,7 @@ body {
   font-size: 0.92rem;
   line-height: 1.55;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -1387,13 +1519,13 @@ body {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 24px 56px rgba(0, 0, 0, 0.35);
 }
-
 .project-image-wrap {
   position: relative;
   width: 100%;
   height: 200px;
   overflow: hidden;
   background: var(--bg-2);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .project-card img {
@@ -1467,13 +1599,33 @@ body {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--glass-border);
   color: var(--text-muted);
-  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.project-tag::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
 }
 
 .project-card:hover .project-tag {
   background: var(--accent-dim);
   border-color: rgba(0, 212, 170, 0.3);
   color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 212, 170, 0.2);
+}
+
+.project-card:hover .project-tag::after {
+  left: 150%;
 }
 
 .project-link {
@@ -1564,8 +1716,51 @@ body {
 .skills-container {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2.5rem;
 }
+
+/* Dedicated particle visualizer stage — sits between the two category rows */
+.skills-particle-stage {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skills-particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+  mix-blend-mode: screen;
+}
+
+.skills-particle-hint {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.skills-particle-stage:has(.skills-particle-canvas canvas) .skills-particle-hint {
+  opacity: 0.3;
+}
+
 
 .skills-category {
   opacity: 0;
@@ -1607,14 +1802,30 @@ body {
 }
 
 .skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  display: flex;
+  overflow-x: auto;
+  overflow-y: visible;  /* allow tooltips above cards to show */
   gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  padding-top: 10rem;  /* space above cards for tooltip to appear when card slides down */
+  padding-left: 1.5rem;
+  
+  /* Hide scrollbar for cleaner look */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.skills-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .skill-card {
+  flex: 0 0 calc(16.666% - 1.25rem); /* Force 6 cards per view max minus gap */
+  min-width: 170px;
+  max-width: 220px;
   position: relative;
-  padding: 1.75rem;
+  padding: 1.5rem 1.25rem 1.75rem;
+  overflow: visible; /* allow tooltip and badge to overflow card bounds */
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
@@ -1638,9 +1849,9 @@ body {
 .skill-card:nth-child(5) { transition-delay: 0.25s; }
 
 .skill-card:hover {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(24px); /* slide DOWN — reveals space above for the tooltip */
   border-color: rgba(0, 212, 170, 0.3);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 212, 170, 0.1);
+  box-shadow: 0 -8px 32px rgba(0, 212, 170, 0.12), 0 0 0 1px rgba(0, 212, 170, 0.15);
 }
 
 .skill-card-inner {
@@ -1648,6 +1859,32 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+.skill-float-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: var(--accent);
+  background: rgba(0, 212, 170, 0.12);
+  border: 1px solid rgba(0, 212, 170, 0.25);
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  transition: transform 0.4s var(--ease-out-expo), color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+
+.skill-card:hover .skill-float-badge {
+  transform: scale(1.15) rotate(8deg);
+  color: var(--accent);
+  background: rgba(0, 212, 170, 0.2);
+  box-shadow: 0 0 16px rgba(0, 212, 170, 0.4);
 }
 
 .skill-progress-ring {
@@ -1698,15 +1935,80 @@ body {
 
 .skill-name {
   font-family: var(--font-head);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text);
   margin: 0;
   letter-spacing: -0.01em;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: center;
+  line-height: 1.35;
+  /* Replace slash with a space+slash+space so browser wraps at / */
 }
 
 .skill-card:hover .skill-ring-progress {
   filter: drop-shadow(0 0 12px var(--accent-glow));
+}
+
+/* ===== Skill Tooltip (shown on hover) ===== */
+.skill-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: 200px;
+  padding: 1rem;
+  background: rgba(10, 10, 14, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 212, 170, 0.2);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s var(--ease-out-expo), transform 0.25s var(--ease-out-expo), visibility 0.25s;
+}
+
+.skill-card:hover .skill-tooltip {
+  opacity: 1;
+  visibility: visible;
+  /* card moves down 24px; add that to bottom so tooltip stays in the revealed space above */
+  bottom: calc(100% + 34px);
+  transform: translateX(-50%) translateY(0);
+}
+
+.st-header {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.st-bar-bg {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+
+.st-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 99px;
+}
+
+.st-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
 /* ===== Achievements Section (Premium) ===== */
@@ -1923,22 +2225,6 @@ body {
   transition: border-color 0.3s;
 }
 
-.ach-card .ach-card-body::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.ach-card:hover .ach-card-body::before {
-  opacity: 1;
-}
-
 .ach-card:not(.ach-card-has-media) .ach-card-body {
   border-top: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
@@ -1983,6 +2269,7 @@ body {
   flex: 1;
   min-height: 0;
   display: -webkit-box;
+  line-clamp: 4;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -2372,6 +2659,7 @@ body {
   flex: 1;
   min-height: 0;
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -2880,3 +3168,1898 @@ body {
   .skill-percentage { font-size: 1.2rem; }
   .skill-card { padding: 1.5rem; }
 }
+
+/* =====================================================
+   ===== 3D ANIMATED BLOCKS â€” perspective tilt system
+   ===================================================== */
+
+/* Perspective container â€” wraps the card */
+.block-3d-scene {
+  perspective: 900px;
+  perspective-origin: 50% 50%;
+}
+
+/* The card itself: 3D positioning layer */
+.block-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition:
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Idle floating animation â€” subtle Z-depth bob */
+@keyframes block3dFloat {
+  0%   { transform: perspective(900px) translateZ(0px)  rotateX(0deg)    rotateY(0deg); }
+  25%  { transform: perspective(900px) translateZ(6px)   rotateX(0.8deg) rotateY(-0.5deg); }
+  50%  { transform: perspective(900px) translateZ(10px)  rotateX(1.2deg) rotateY(0.3deg); }
+  75%  { transform: perspective(900px) translateZ(5px)   rotateX(0.5deg) rotateY(0.7deg); }
+  100% { transform: perspective(900px) translateZ(0px)  rotateX(0deg)    rotateY(0deg); }
+}
+
+/* Applied when mouse is NOT over the card */
+.block-3d.block-3d-idle {
+  animation: block3dFloat 6s ease-in-out infinite;
+}
+
+/* While the JS tilt is active (mouse over) */
+.block-3d.block-3d-active {
+  animation: none !important;
+  transition:
+    transform 0.1s linear,
+    box-shadow 0.1s linear;
+}
+
+/* Inner shine layer â€” floats on the Z axis above the card face */
+.block-3d-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    600px circle at var(--shine-x, 50%) var(--shine-y, 50%),
+    rgba(255, 255, 255, 0.07) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s;
+  transform: translateZ(1px);
+  z-index: 2;
+}
+
+.block-3d:hover .block-3d-shine,
+.block-3d.block-3d-active .block-3d-shine {
+  opacity: 1;
+}
+
+/* Edge depth stripe â€” the bottom/right edge appears raised */
+.block-3d::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    inset 1px 0 0 rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+  transform: translateZ(0.5px);
+  z-index: 1;
+}
+
+/* Elevated shadow under card when tilted */
+.block-3d.block-3d-active {
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.45),
+    0 12px 30px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* ---- Apply perspective scenes to grid containers ---- */
+.about-premium-info         { perspective: 900px; }
+.timeline-list              { perspective: 900px; }
+.education-grid             { perspective: 900px; }
+.projects-grid              { perspective: 900px; }
+.skills-grid                { perspective: 900px; }
+.achievements-stats-row     { perspective: 900px; }
+.achievements-grid          { perspective: 900px; }
+.certs-grid                 { perspective: 900px; }
+.contact-info               { perspective: 900px; }
+
+/* ---- Disable 3D on coarse pointer (touch) devices ---- */
+@media (pointer: coarse) {
+  .block-3d-idle,
+  .block-3d.block-3d-active {
+    animation: none !important;
+    transform: none !important;
+    transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s !important;
+  }
+  .block-3d-shine { display: none; }
+}
+
+/* =====================================================
+   ===== ROAD JOURNEY â€” Horizontal Scroll
+   ===================================================== */
+   
+.horizontal-scroll-container {
+  width: 100%;
+  position: relative;
+  /* Height set via JS based on horizontal content width */
+}
+
+.horizontal-scroll-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+
+/* Override old timeline layout inside journey */
+#timelineView.journey-mode {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+#timelineView.journey-mode .timeline-track { display: none; }
+
+/* Scene container */
+.journey-scene {
+  position: relative;
+  height: 100vh;
+  /* Width set via JS */
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  will-change: transform;
+}
+
+/* Sky + ground gradient background */
+.journey-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #01020e 0%,
+    #050d1c 18%,
+    #081724 35%,
+    #0b1d10 60%,
+    #080f08 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Stars */
+.journey-stars { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.jstar {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: jstarTwinkle var(--tw, 3s) ease-in-out infinite;
+  animation-delay: var(--td, 0s);
+}
+@keyframes jstarTwinkle {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50%       { opacity: 0.9;  transform: scale(1.4); }
+}
+
+/* Glass environment panels */
+.jglass-panel {
+  position: absolute;
+  z-index: 2;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.022);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 8px 40px rgba(0,0,0,0.25);
+  pointer-events: none;
+  transition: opacity 1s;
+}
+/* Subtle inner accent glow on glass panels */
+.jglass-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(0,212,170,0.04) 0%,
+    transparent 50%,
+    rgba(124,58,237,0.03) 100%
+  );
+}
+
+/* Curved SVG road (fills the whole scene) */
+.journey-road-svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 3;
+  overflow: visible;
+  pointer-events: none;
+}
+/* SVG center dash animation */
+.jroad-center-dashes {
+  stroke-dashoffset: 0;
+  animation: svgDashAnim 0.55s linear infinite;
+}
+@keyframes svgDashAnim {
+  to { stroke-dashoffset: -52; }
+}
+
+/* Car wrapper â€” JS sets left+top via getPointAtLength, rotates to follow curve */
+.journey-car-wrap {
+  position: absolute;
+  z-index: 12;
+  width: 72px;
+  will-change: transform;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.car-svg-container svg { width: 100%; display: block; }
+
+/* Headlight cone (now acting as taillights/backup glow, pointing left) */
+.journey-headlights {
+  position: absolute;
+  top: 50%;
+  left: -30px; /* moved from right side to left side */
+  transform: translateY(-50%) rotate(90deg); /* rotated 90deg instead of -90deg */
+  width: 0; height: 0;
+  border-left: 36px solid transparent;
+  border-right: 36px solid transparent;
+  border-bottom: 42px solid rgba(255, 240, 160, 0.13);
+  filter: blur(7px);
+  animation: jHeadlightPulse 1.8s ease-in-out infinite;
+}
+@keyframes jHeadlightPulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+/* Undercar glow */
+.journey-car-glow {
+  position: absolute;
+  bottom: -7px; left: 12%; right: 12%;
+  height: 12px;
+  background: radial-gradient(ellipse, rgba(0,212,170,0.5) 0%, transparent 70%);
+  filter: blur(6px);
+  animation: jGlowPulse 1.2s ease-in-out infinite alternate;
+}
+@keyframes jGlowPulse {
+  from { opacity: 0.45; transform: scaleX(0.8); }
+  to   { opacity: 1;    transform: scaleX(1.2); }
+}
+
+/* Stop anchor (absolutely positioned on the horizontal track) */
+.journey-stop {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 0;
+  z-index: 6;
+}
+
+/* Pin dot on the road */
+.journey-pin {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -50%);
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 0 3px var(--bg-2), 0 0 18px var(--accent-glow);
+  z-index: 8;
+  transition: box-shadow 0.4s, transform 0.4s;
+}
+.journey-stop.arrived .journey-pin {
+  box-shadow: 0 0 0 3px var(--bg-2), 0 0 40px var(--accent), 0 0 70px var(--accent-glow);
+  transform: translate(-50%, -50%) scale(1.35);
+}
+
+/* Road sign container */
+.journey-sign {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  z-index: 5; /* Lower than cards (7) */
+  transition: opacity 0.55s var(--ease-out-expo) 0.15s, transform 0.55s var(--ease-out-expo) 0.15s;
+  pointer-events: none;
+}
+.journey-sign.sign-top {
+  transform: translateX(-50%) translateY(0);
+}
+.journey-sign.sign-bottom {
+  flex-direction: column-reverse; /* Board at bottom, post at top */
+  transform: translateX(-50%) translateY(0);
+}
+.journey-stop.arrived .journey-sign {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.journey-sign-board {
+  background: #122a14;
+  border: 2px solid #1e5c22;
+  color: #8ef5a0;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 4px;
+  white-space: normal;
+  text-align: center;
+  max-width: 140px;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.6), 0 0 12px rgba(0,212,170,0.15);
+}
+.journey-sign-post {
+  width: 3px; height: 35px;
+  background: linear-gradient(180deg, #444, #222);
+  border-radius: 2px;
+}
+
+/* Experience cards */
+.journey-exp-card {
+  position: absolute;
+  /* Explicit horizontal centering without translateX to ensure bulletproof alignment */
+  left: 0;
+  margin-left: -170px; /* Half of 340px */
+  width: 340px;
+  max-width: 85vw; /* Prevent overflow on bounds */
+  opacity: 0;
+  z-index: 7;
+  transition: opacity 0.65s var(--ease-out-expo) 0.1s, transform 0.65s var(--ease-out-expo) 0.1s;
+}
+.journey-exp-card.card-top {
+  bottom: calc(50% + 50px);
+  transform: translateY(22px);
+}
+.journey-exp-card.card-bottom {
+  top: calc(50% + 50px);
+  transform: translateY(-22px);
+}
+.journey-stop.arrived .journey-exp-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Card connector line */
+.jcard-line {
+  position: absolute;
+  left: 170px; /* Center of the card */
+  margin-left: -1px; /* Center the 2px line width */
+  width: 2px;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.journey-exp-card.card-top .jcard-line {
+  top: 100%; height: 50px;
+  background: linear-gradient(180deg, var(--accent), transparent);
+}
+.journey-exp-card.card-bottom .jcard-line {
+  bottom: 100%; height: 50px;
+  background: linear-gradient(0deg, var(--accent), transparent);
+}
+
+/* Card inner */
+.jcard-inner {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.5rem 1.25rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.jcard-inner:hover {
+  border-color: rgba(0,212,170,0.22);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+}
+.jcard-date {
+  font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--accent); margin-bottom: 0.6rem; display: block;
+}
+.jcard-icon {
+  width: 2.6rem; height: 2.6rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent-dim), var(--accent-2-dim));
+  color: var(--accent);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 1rem; margin-bottom: 0.75rem;
+}
+.jcard-title {
+  font-family: var(--font-head); font-size: 1.1rem; font-weight: 700;
+  color: var(--text); margin: 0 0 0.2rem; letter-spacing: -0.02em;
+}
+.jcard-company {
+  font-size: 0.875rem; color: var(--text-muted); margin: 0 0 0.75rem;
+}
+.jcard-desc-wrapper {
+  margin-bottom: 0.75rem;
+}
+.jcard-desc {
+  font-size: 0.85rem; color: var(--text-muted);
+  line-height: 1.6; margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.jcard-desc-wrapper.expanded .jcard-desc {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+}
+.jcard-read-more {
+  background: none; border: none; padding: 0;
+  color: var(--accent); font-size: 0.75rem; font-weight: 600;
+  cursor: pointer; margin-top: 0.4rem;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+.jcard-read-more:hover { color: var(--accent-glow); }
+.jcard-badge {
+  display: inline-block;
+  padding: 0.32rem 0.85rem;
+  font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  background: var(--accent-dim); color: var(--accent);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(0,212,170,0.28);
+}
+.jcard-atts {
+  margin-top: 0.75rem; padding-top: 0.75rem;
+  border-top: 1px solid var(--glass-border);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;
+}
+.jcard-att-label {
+  font-size: 0.62rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);
+}
+.jcard-att-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.38rem 0.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-muted); font-size: 0.8rem;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.2s;
+}
+.jcard-att-btn i { color: var(--accent); font-size: 0.8rem; }
+.jcard-att-btn:hover {
+  border-color: rgba(0,212,170,0.35); color: var(--accent);
+  background: rgba(0,212,170,0.05); transform: translateY(-1px);
+}
+
+/* ===== Glow Cursor Flashlight ===== */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 212, 170, 0.15) 0%, rgba(0, 212, 170, 0) 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  mix-blend-mode: screen;
+}
+
+.cursor-glow.active {
+  opacity: 1;
+}
+
+/* ===== Voice Visualizer (AI Audio Wave) ===== */
+.voice-visualizer {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 1.2rem;
+  margin-left: 0.75rem;
+  vertical-align: middle;
+}
+
+.voice-bar {
+  width: 3px;
+  background-color: var(--accent);
+  border-radius: 2px;
+  animation: voiceBounce 1.2s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.voice-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+.voice-bar:nth-child(2) { height: 100%; animation-delay: 0.2s; }
+.voice-bar:nth-child(3) { height: 60%; animation-delay: 0.3s; }
+.voice-bar:nth-child(4) { height: 80%; animation-delay: 0.4s; }
+.voice-bar:nth-child(5) { height: 30%; animation-delay: 0.5s; }
+
+@keyframes voiceBounce {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1); }
+}
+
+/* ===== Glassmorphism Glare Effect ===== */
+.hero-glass-glare {
+  position: relative;
+  /* overflow: hidden removed â€” it caused a visible box outline on hover */
+}
+
+.hero-glass-glare::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+  z-index: 5;
+  pointer-events: none;
+  /* Clip the shimmer to the element bounds without triggering a visible box on the parent */
+  clip-path: inset(0);
+}
+
+.hero-glass-glare:hover::before {
+  animation: glassGlare 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes glassGlare {
+  0% { left: -150%; }
+  100% { left: 200%; }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .journey-exp-card { width: 300px; margin-left: -150px; }
+  .jcard-line { left: 150px; }
+  .journey-exp-card.card-top { bottom: calc(50% + 40px); }
+  .journey-exp-card.card-bottom  { top: calc(50% + 40px); }
+  .journey-exp-card.card-top .jcard-line { height: 40px; }
+  .journey-exp-card.card-bottom .jcard-line { height: 40px; }
+}
+@media (max-width: 600px) {
+  /* On very small screens */
+  .journey-exp-card { width: 260px; margin-left: -130px; }
+  .jcard-line { left: 130px; }
+  .journey-exp-card.card-top { bottom: calc(50% + 34px); }
+  .journey-exp-card.card-bottom  { top: calc(50% + 34px); }
+  .journey-exp-card.card-top .jcard-line { height: 34px; }
+  .journey-exp-card.card-bottom .jcard-line { height: 34px; }
+}
+/* =====================================================
+   ===== EXPERIENCE — NEW ANIMATION SYSTEMS
+   ===================================================== */
+
+/* Progress Bar */
+.journey-progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  z-index: 300; border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 12px var(--accent-glow), 0 0 4px var(--accent);
+  opacity: 0; pointer-events: none; transition: opacity 0.3s, width 0.08s linear;
+}
+.journey-progress-bar.visible { opacity: 1; }
+
+/* Stop Pin Ripple */
+.journey-pin::before, .journey-pin::after {
+  content: ''; position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px solid var(--accent); opacity: 0; pointer-events: none;
+}
+.journey-stop.arrived .journey-pin::before { animation: pinRipple 2.1s ease-out 0.15s infinite; }
+.journey-stop.arrived .journey-pin::after  { animation: pinRipple 2.1s ease-out 0.85s infinite; }
+@keyframes pinRipple {
+  0%   { opacity: 0.75; transform: scale(1); }
+  100% { opacity: 0;    transform: scale(3.5); }
+}
+
+/* Card-Deal Entrance */
+.journey-exp-card.card-bottom {
+  transform-origin: top center;
+  transform: translateY(-26px) rotateX(-11deg) scale(0.92);
+}
+.journey-exp-card.card-top {
+  transform-origin: bottom center;
+  transform: translateY(26px) rotateX(11deg) scale(0.92);
+}
+.journey-stop.arrived .journey-exp-card {
+  opacity: 1;
+  transform: translateY(0) rotateX(0deg) scale(1) !important;
+  transition: opacity 0.75s var(--ease-out-expo) 0.08s, transform 0.75s var(--ease-out-expo) 0.08s;
+}
+
+/* Milestone Badge */
+.journey-milestone-badge {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  background: rgba(6,6,8,0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,212,170,0.25); border-radius: 50px;
+  font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; color: var(--text-muted);
+  opacity: 0; transform: translateY(12px) scale(0.95);
+  transition: opacity 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
+  pointer-events: none;
+}
+.journey-milestone-badge.visible { opacity: 1; transform: translateY(0) scale(1); }
+.journey-milestone-badge .jmb-num { font-size: 1.05rem; font-weight: 800; color: var(--accent); min-width: 1.2ch; text-align: right; }
+.journey-milestone-badge i { color: var(--accent); }
+
+/* Exhaust Particles */
+.journey-exhaust-dot {
+  position: absolute; border-radius: 50%;
+  pointer-events: none; z-index: 11;
+  animation: exhaustFade 0.85s ease-out forwards;
+}
+@keyframes exhaustFade {
+  0%   { opacity: 0.75; transform: scale(1); }
+  100% { opacity: 0;    transform: scale(2.8); }
+}
+
+/* Car Engine Shake */
+@keyframes carEngineShake {
+  0%, 100% { transform: translate(0,0) rotate(0); }
+  25%  { transform: translate(-1.2px, 0.6px); }
+  50%  { transform: translate(1.2px, -0.6px); }
+  75%  { transform: translate(-0.6px, 1px); }
+}
+.car-shaking .car-svg-container { animation: carEngineShake 0.10s linear infinite; }
+
+/* Ambient Road Glow */
+.journey-road-glow {
+  position: absolute; left: 0; width: 100%; pointer-events: none; z-index: 4;
+  border-radius: 50%;
+  background: radial-gradient(ellipse 80% 100% at 50% 50%, rgba(0,212,170,0.11) 0%, transparent 70%);
+  filter: blur(22px);
+  animation: roadGlowPulse 2.3s ease-in-out infinite;
+}
+@keyframes roadGlowPulse {
+  0%, 100% { opacity: 0.55; transform: scaleX(0.9); }
+  50%       { opacity: 1.0;  transform: scaleX(1.1); }
+}
+
+/* Parallax Scenery Glass Panels */
+.jglass-panel { will-change: transform; transition: transform 0.05s linear; }
+
+/* Sign Typewriter Cursor */
+.journey-sign-board .jtype-cursor {
+  display: inline-block; width: 2px; height: 0.75em;
+  background: currentColor; margin-left: 1px; vertical-align: middle;
+  animation: jtypeBlink 0.55s step-end infinite;
+}
+@keyframes jtypeBlink { 50% { opacity: 0; } }
+
+/* =====================================================
+   ===== EDUCATION — PREMIUM ANIMATION SYSTEM
+   ===================================================== */
+
+/* ---- 3D Flip Card Architecture ---- */
+.education-card {
+  perspective: 1100px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  cursor: pointer;
+}
+
+.edu-card-flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.4, 0.2, 0.2, 1);
+  border-radius: var(--radius-lg);
+}
+
+.education-card.flipped .edu-card-flipper {
+  transform: rotateY(180deg);
+}
+
+/* Front Face */
+.edu-card-front,
+.edu-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+.edu-card-front {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  display: flex;
+  flex-direction: column;
+}
+
+/* Back Face */
+.edu-card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, rgba(0,212,170,0.07) 0%, rgba(124,58,237,0.07) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.5rem 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+  border-color: rgba(0,212,170,0.18);
+}
+
+/* Flip hint tooltip */
+.edu-flip-hint {
+  position: absolute;
+  bottom: 0.6rem;
+  right: 0.75rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.education-card:hover .edu-flip-hint { opacity: 1; }
+
+/* Back content */
+.edu-back-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,212,170,0.18);
+}
+
+.edu-back-icon {
+  width: 2.4rem; height: 2.4rem;
+  border-radius: 10px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+
+.edu-back-title {
+  font-family: var(--font-head);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.edu-back-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Milestones list */
+.edu-milestones {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.edu-milestone {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.45s var(--ease-out-expo), transform 0.45s var(--ease-out-expo);
+}
+
+.education-card.flipped .edu-milestone:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.32s; }
+.education-card.flipped .edu-milestone:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.44s; }
+.education-card.flipped .edu-milestone:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.56s; }
+.education-card.flipped .edu-milestone:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.68s; }
+
+.edu-milestone-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: 0.35em;
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+
+.edu-milestone-text {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.edu-milestone-text strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Score badge on back */
+.edu-back-score {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0,212,170,0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.edu-back-score-val {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+}
+
+.edu-back-score-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* ---- Holographic shimmer overlay ---- */
+.edu-holo-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255,0,128,0.04) 20%,
+    rgba(0,212,170,0.06) 40%,
+    rgba(124,58,237,0.05) 60%,
+    rgba(255,200,0,0.04) 80%,
+    transparent 100%
+  );
+  background-size: 200% 200%;
+  transition: opacity 0.3s;
+}
+
+.education-card:hover .edu-holo-overlay {
+  opacity: 1;
+}
+
+/* ---- Timeline dot trail (connects cards vertically) ---- */
+.edu-timeline-trail {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border-radius: 2px;
+  opacity: 0;
+  transition: height 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, opacity 0.4s 0.2s;
+  z-index: 1;
+  pointer-events: none;
+  height: 0;
+}
+
+.education-grid.trail-visible .edu-timeline-trail {
+  opacity: 0.5;
+}
+
+/* Trail pulsing tip */
+.edu-timeline-trail::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  animation: trailTipPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes trailTipPulse {
+  0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+  50%       { opacity: 1;   transform: translateX(-50%) scale(1.5); }
+}
+
+/* ---- Score value animate state ---- */
+.education-score-value[data-animated] {
+  display: inline-block;
+  transition: color 0.3s;
+}
+
+/* ---- Thumbnail parallax ---- */
+.education-thumb img {
+  transition: transform 0.15s linear, filter 0.3s !important;
+  will-change: transform;
+}
+
+/* ---- Card reveal blur-to-sharp ---- */
+.education-card {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s var(--ease-out-expo),
+    filter 0.7s var(--ease-out-expo),
+    transform 0.7s var(--ease-out-expo);
+}
+
+.education-grid.trail-visible .education-card:nth-child(1) { opacity: 1; filter: blur(0); transform: none; transition-delay: 0.10s; }
+.education-grid.trail-visible .education-card:nth-child(2) { opacity: 1; filter: blur(0); transform: none; transition-delay: 0.22s; }
+.education-grid.trail-visible .education-card:nth-child(3) { opacity: 1; filter: blur(0); transform: none; transition-delay: 0.34s; }
+
+/* ---- Education: Diploma Gold Shimmer Layer ---- */
+.edu-shimmer-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.edu-shimmer-layer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 215, 80, 0.22) 50%,
+    rgba(255, 255, 255, 0.12) 55%,
+    transparent 80%
+  );
+  transform: skewX(-15deg);
+}
+@keyframes eduShimmer {
+  0%   { left: -120%; }
+  100% { left: 160%; }
+}
+.edu-shimmer-layer[style*="eduShimmer"]::after { animation: eduShimmer 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+
+/* ---- Education grid height for flipper ---- */
+.education-grid {
+  align-items: stretch;
+}
+.education-card {
+  min-height: 400px;
+}
+.edu-card-flipper {
+  min-height: 400px;
+}
+@media (max-width: 900px) {
+  .education-grid { grid-template-columns: 1fr; }
+  .education-card { min-height: 340px; }
+  .edu-card-flipper { min-height: 340px; }
+}
+
+/* Fix: shimmer triggered by class toggle */
+.edu-shimmer-layer.edu-shimmer-active::after {
+  animation: eduShimmer 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* ---- Education: better flip hint ---- */
+.edu-flip-hint {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(0, 212, 170, 0.10);
+  border: 1px solid rgba(0, 212, 170, 0.22);
+  border-radius: 20px;
+  padding: 0.28rem 0.65rem;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.edu-flip-hint i {
+  font-size: 0.6rem;
+  animation: hintSpin 2.5s linear infinite;
+}
+
+@keyframes hintSpin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.education-card:hover .edu-flip-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================================================
+   ===== FEATURED PROJECTS — ANIMATION SYSTEM
+   ===================================================== */
+
+/* Neon border SVG overlay */
+.pcard-neon-border {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  border-radius: inherit;
+}
+.pcard-neon-rect {
+  fill: none;
+  stroke-width: 2;
+  opacity: 0;
+  filter: drop-shadow(0 0 6px currentColor);
+  transition: opacity 0.3s;
+}
+.pcard-neon-rect.neon-trace {
+  animation: neonTrace 0.72s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes neonTrace {
+  0%   { stroke-dashoffset: var(--perimeter, 9999); opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+/* Project index number watermark */
+.pcard-index {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 2.6rem;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  color: rgba(255,255,255,0.04);
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+  transition: color 0.3s;
+}
+.project-card:hover .pcard-index {
+  color: rgba(255,255,255,0.09);
+}
+
+/* CRT Scanline */
+.pcard-scanline {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+.pcard-scanline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(0,212,170,0.35), transparent);
+  top: -4px;
+  filter: blur(1px);
+}
+.pcard-scanline.scanline-go::after {
+  animation: scanlineSweep 0.65s ease-in forwards;
+}
+@keyframes scanlineSweep {
+  0%   { top: -4px; opacity: 0.9; }
+  80%  { opacity: 0.6; }
+  100% { top: 104%; opacity: 0; }
+}
+
+/* Stat overlay (GitHub link) */
+.pcard-stat-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(0deg, rgba(6,6,8,0.88) 0%, transparent 100%);
+  transform: translateY(100%);
+  transition: transform 0.35s var(--ease-out-expo);
+  pointer-events: none;
+}
+.project-card:hover .pcard-stat-overlay {
+  transform: translateY(0);
+}
+.pcard-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+}
+.pcard-stat i { color: var(--accent); }
+
+/* Image wipe-from-bottom overlay */
+.project-image-overlay {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.45s var(--ease-out-expo), opacity 0.3s;
+}
+.project-card:hover .project-image-overlay {
+  clip-path: inset(0% 0 0 0);
+  opacity: 1;
+}
+
+/* Tag spring pop-in */
+.project-tag {
+  opacity: 0;
+  transform: scale(0.7) translateY(6px);
+  transition:
+    opacity 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    background 0.25s,
+    color 0.25s,
+    border-color 0.25s,
+    box-shadow 0.25s;
+  transition-delay: var(--tag-delay, 0s);
+}
+.project-tag.tag-popped {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Override existing hover to keep colour transition while popped */
+.project-card:hover .project-tag.tag-popped {
+  background: var(--accent-dim);
+  border-color: rgba(0,212,170,0.3);
+  color: var(--accent);
+  transform: translateY(-2px) scale(1);
+  box-shadow: 0 4px 12px rgba(0,212,170,0.2);
+}
+
+/* Magnetic button transition */
+.pcard-magnetic-btn {
+  transition: transform 0.15s ease, color 0.25s !important;
+}
+
+/* =====================================================
+   ===== TECHNICAL SKILLS — ANIMATION SYSTEM
+   ===================================================== */
+
+/* 1. Background Constellation Canvas */
+.skills-section {
+  position: relative;
+  overflow: hidden;
+}
+.skills-constellation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.skills-section > .wrap {
+  position: relative;
+  z-index: 1;
+}
+
+/* 2. 3D Ring Spin-up */
+.skill-card-3d {
+  perspective: 1000px;
+  transform: perspective(1000px) rotateY(90deg) scale(0.9);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease-out;
+}
+.skill-card-flipped.skill-card-3d {
+  transform: perspective(1000px) rotateY(0deg) scale(1);
+  opacity: 1;
+}
+
+/* 4. Ring Fill Easing Overshoot (override previous) */
+.skill-ring-progress {
+  transition: stroke-dashoffset 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), stroke 0.3s !important;
+}
+
+/* 5. Glow pulse on complete */
+.skill-complete-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(0, 212, 170, 0.4) 0%, transparent 60%);
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+  transition: opacity 0.4s, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.skill-complete-glow.pulse-active {
+  opacity: 1;
+  transform: scale(1.4);
+}
+
+/* 6. Floating icon badge */
+.skill-float-badge {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 32px;
+  height: 32px;
+  background: var(--bg-1);
+  border: 1px solid rgba(0, 212, 170, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: var(--accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  animation: skillFloat 3s ease-in-out infinite;
+}
+@keyframes skillFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* 7. Hover Tooltip */
+.skill-tooltip {
+  position: absolute;
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px) scale(0.9);
+  background: rgba(10, 10, 12, 0.95);
+  border: 1px solid rgba(0, 212, 170, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem;
+  width: max-content;
+  max-width: 200px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+.skill-card:hover .skill-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+.skill-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(0, 212, 170, 0.2) transparent transparent transparent;
+}
+.st-header {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+  text-align: left;
+}
+.st-bar-bg {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+.st-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  box-shadow: 0 0 6px var(--accent);
+}
+.st-desc {
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: var(--text);
+  text-align: left;
+}
+
+/* =====================================================
+   ===== ACHIEVEMENTS — ANIMATION SYSTEM
+   ===================================================== */
+
+/* 1. Stat Card Explosion Burst */
+.stat-val-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  position: relative;
+}
+.stat-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.stat-burst.burst-active {
+  animation: statExplosion 0.8s ease-out forwards;
+}
+@keyframes statExplosion {
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; box-shadow: 0 0 0 0 var(--accent); }
+  100% { transform: translate(-50%, -50%) scale(8); opacity: 0; box-shadow: 0 0 20px 10px transparent; }
+}
+
+/* 2. Trophy Badge Drop */
+.ach-trophy-drop {
+  transform: translateY(-40px) scale(0.8);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
+  transition-delay: var(--drop-delay, 0.3s);
+}
+.stat-card-premium.stats-anim-start .ach-trophy-drop {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* 3. Card Shimmer Pagination Shuffle */
+.ach-shuffle-enter {
+  animation: cardShuffleEnter 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+  animation-delay: var(--shuffle-delay, 0s);
+}
+@keyframes cardShuffleEnter {
+  0% { transform: translateY(30px) rotate(-3deg) scale(0.95); opacity: 0; }
+  100% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+}
+
+/* 4. Ken Burns Image Loop */
+.ach-media .ach-ken-burns {
+  transform-origin: 50% 50%;
+  animation: kenBurns 15s alternate infinite ease-in-out;
+}
+@keyframes kenBurns {
+  0%   { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.15) translate(-2%, 2%); }
+}
+
+
+
+/* 6. Hover glow halo behind icon */
+.ach-hover-halo {
+  position: absolute;
+  inset: -15px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(0, 212, 170, 0.35) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.4s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 0;
+}
+.ach-icon-wrap {
+  position: relative;
+  z-index: 1;
+}
+.ach-card:hover .ach-hover-halo {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* 7. Counter suffix bounce */
+.stat-suffix {
+  font-family: var(--font-head);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent);
+  opacity: 0;
+  transform: scale(0.5) translateX(-10px);
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+}
+.stat-suffix.suffix-popped {
+  opacity: 1;
+  transform: scale(1) translateX(0);
+}
+
+/* =====================================================
+   ===== CERTIFICATIONS — ANIMATION SYSTEM
+   ===================================================== */
+
+/* 1. 3D Card Flip setup */
+.cert-card {
+  perspective: 1200px;
+  background: transparent !important;
+  border: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  overflow: visible;
+  padding: 0;
+  height: 380px;
+}
+.cert-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+}
+.cert-card:hover .cert-card-inner {
+  transform: rotateY(180deg);
+}
+
+.cert-front, .cert-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.cert-back {
+  transform: rotateY(180deg);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* 2. Holographic foil effect */
+.cert-holo {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: conic-gradient(
+    from 180deg at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    transparent 0%,
+    rgba(255, 0, 128, 0.1) 20%,
+    rgba(255, 165, 0, 0.1) 40%,
+    rgba(0, 255, 0, 0.1) 60%,
+    rgba(0, 212, 170, 0.1) 80%,
+    transparent 100%
+  );
+  transition: opacity 0.4s;
+  pointer-events: none;
+  z-index: 1;
+}
+.cert-card:hover .cert-holo {
+  opacity: 1;
+}
+
+/* 3. Icon orbit ring */
+.cert-orbit {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  animation: certOrbitSpin 8s linear infinite;
+  pointer-events: none;
+}
+.cert-orbit::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--cert-color);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--cert-color);
+}
+@keyframes certOrbitSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 4. Stamp Entrance */
+.cert-card {
+  opacity: 0;
+  transform: scale(1.3) rotate(-5deg);
+}
+.cert-stamp-in {
+  animation: certStampIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+@keyframes certStampIn {
+  0% { opacity: 0; transform: scale(1.3) rotate(-5deg); }
+  60% { opacity: 1; transform: scale(0.95) rotate(1deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* 5. Staggered Ribbon Reveal */
+.cert-ribbon {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 30px;
+  height: 45px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.8rem;
+  padding-bottom: 5px;
+  transform: translateY(-100%);
+  opacity: 0;
+  z-index: 2;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+}
+.cert-ribbon.ribbon-drop {
+  transition-delay: var(--ribbon-delay, 0.3s);
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* 6. Issuer logo parallax (JS handles transform) */
+.cert-icon-parallax {
+  position: relative;
+  transition: transform 0.1s ease-out;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+.cert-card .cert-icon-wrap {
+  margin-bottom: 0;
+}
+
+/* 7. Glowing border on hover */
+.cert-glow-border {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  padding: 2px; /* Border thickness */
+  background: conic-gradient(from var(--border-angle, 0deg), transparent 70%, var(--cert-color) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+  animation: bgSpin 3s linear infinite;
+  z-index: 10;
+}
+.cert-card:hover .cert-glow-border {
+  opacity: 1;
+}
+
+/* Shimmer pagination shuffle */
+.cert-shuffle-enter {
+  animation: certShuffleEnter 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+  animation-delay: var(--shuffle-delay, 0s);
+  opacity: 1 !important; /* Override stamp opacity */
+  transform: none !important;
+}
+@keyframes certShuffleEnter {
+  0% { transform: translateY(30px) rotate(3deg) scale(0.95); opacity: 0; }
+  100% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+}
+
+/* =====================================================
+   ===== EXPERIENCE — 3D CARD FLIP
+   ===================================================== */
+
+.journey-exp-card {
+  perspective: 1200px;
+  background: transparent !important;
+  border: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  transform-style: preserve-3d;
+}
+
+.exp-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.journey-exp-card:hover .exp-card-inner,
+.journey-exp-card.flipped .exp-card-inner {
+  transform: rotateY(180deg);
+}
+
+.exp-card-front, .exp-card-back {
+  width: 100%;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+}
+
+.exp-card-back {
+  position: absolute;
+  height: 100%;
+  transform: rotateY(180deg);
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  overflow: hidden;
+}
+
+/* Hide old description container / read more btn if they exist */
+.jcard-desc-wrapper, .jcard-read-more, .exp-read-more {
+  display: none !important;
+}
+
+/* Front Face Content */
+.exp-date {
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.exp-role-title {
+  font-family: var(--font-head);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.exp-role-company {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.exp-summary {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Back Face Content */
+.exp-desc-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  margin-bottom: 1rem;
+}
+.exp-desc-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.exp-desc-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+.exp-desc-scroll::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 4px;
+}
+.exp-desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  white-space: pre-line;
+}
+
+/* =====================================================
+   ===== CUSTOM CURSOR & SPOTLIGHT
+   ===================================================== */
+#custom-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 20px; height: 20px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+  mix-blend-mode: difference;
+}
+
+#custom-cursor.cursor-hover {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(0, 212, 170, 0.2);
+  border-color: rgba(0, 212, 170, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+#glow-spotlight {
+  position: fixed;
+  top: 0; left: 0;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0, 212, 170, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#hero-matrix, #hero-nodes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+#hero-nodes {
+  z-index: 2;
+}
+
+/* Hero Inner Depth */
+.hero-inner {
+  position: relative;
+  z-index: 10;
+  transform-style: preserve-3d;
+  transition: transform 0.1s linear; /* Fast transition for mouse follow */
+  pointer-events: auto;
+}
+
+.hero-inner-glow, .hero-label, .hero-name, .hero-role, .hero-tagline, .hero-cta {
+  transform-style: preserve-3d;
+  /* translateZ applied dynamically via JS, but we set a transition to smooth it out */
+  transition: transform 0.1s linear; 
+}
+
+/* Holographic Text Gradient */
+.hero-name-holo-text {
+  background: linear-gradient(
+    270deg,
+    #00d4aa,
+    #0088cc,
+    #a855f7,
+    #ff2a5f,
+    #00d4aa
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: holoFlow 8s ease infinite;
+}
+
+@keyframes holoFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glitch Effect */
+.glitch-reveal {
+  position: relative;
+}
+.glitch-reveal::before,
+.glitch-reveal::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  opacity: 0;
+  z-index: -1;
+}
+.glitch-reveal.is-glitching::before {
+  left: 2px;
+  text-shadow: -2px 0 #ff00c1;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 2s infinite linear alternate-reverse;
+  opacity: 0.8;
+}
+.glitch-reveal.is-glitching::after {
+  left: -2px;
+  text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+  animation: glitch-anim2 3s infinite linear alternate-reverse;
+  opacity: 0.8;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(31px, 9999px, 94px, 0); }
+  20% { clip: rect(62px, 9999px, 42px, 0); }
+  40% { clip: rect(16px, 9999px, 78px, 0); }
+  60% { clip: rect(89px, 9999px, 13px, 0); }
+  80% { clip: rect(45px, 9999px, 56px, 0); }
+  100% { clip: rect(23px, 9999px, 88px, 0); }
+}
+@keyframes glitch-anim2 {
+  0% { clip: rect(65px, 9999px, 100px, 0); }
+  20% { clip: rect(12px, 9999px, 59px, 0); }
+  40% { clip: rect(78px, 9999px, 34px, 0); }
+  60% { clip: rect(45px, 9999px, 86px, 0); }
+  80% { clip: rect(93px, 9999px, 21px, 0); }
+  100% { clip: rect(34px, 9999px, 67px, 0); }
+}
+
+
+ / *   = = = = =   A I   C o r e   V i s u a l i z e r   ( S k i l l s )   = = = = =   * / 
+ # s k i l l s - a i - c o r e - c o n t a i n e r   { 
+     p o s i t i o n :   a b s o l u t e ; 
+     t o p :   0 ; 
+     l e f t :   0 ; 
+     w i d t h :   1 0 0 % ; 
+     h e i g h t :   1 0 0 % ; 
+     z - i n d e x :   0 ; 
+     p o i n t e r - e v e n t s :   n o n e ;   / *   L e t   h o v e r   e v e n t s   p a s s   t h r o u g h   t o   t h e   c a r d s   * / 
+     o p a c i t y :   0 . 6 ;   / *   A d j u s t   o p a c i t y   a s   n e e d e d   * / 
+     t r a n s i t i o n :   o p a c i t y   0 . 5 s   e a s e - i n - o u t ; 
+ } 
+ 
+ # s k i l l s - a i - c o r e - c o n t a i n e r . m o r p h i n g   { 
+     o p a c i t y :   1 ;   / *   M o r e   v i s i b l e   d u r i n g   i n t e r a c t i o n   * / 
+ } 
+ 
+ / *   E n s u r e   s k i l l s   w r a p   i s   a b o v e   c a n v a s   * / 
+ . s k i l l s - s e c t i o n   . w r a p   { 
+     p o s i t i o n :   r e l a t i v e ; 
+     z - i n d e x :   2 ; 
+ } 
+ 
+ . s k i l l s - s e c t i o n   { 
+     p o s i t i o n :   r e l a t i v e ; 
+     o v e r f l o w :   h i d d e n ; 
+ } 
+ 
+ 
+ 

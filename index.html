@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -10,15 +10,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
 </head>
-<body>
+<body class="light-mode">
+  <!-- Custom Cursor & Spotlight -->
+  <!-- <div id="glow-spotlight" aria-hidden="true"></div> -->
+
+  <!-- Initial Page Loader -->
+  <div class="page-loader" id="pageLoader">
+    <div id="preloader-canvas-container" style="position: absolute; inset: 0; z-index: 1;"></div>
+    <div class="loader-terminal" style="position: relative; z-index: 2; opacity: 0;">
+      <span class="loader-text">Initializing AI/ML Portfolio</span><span class="loader-cursor">_</span>
+    </div>
+  </div>
+
   <div class="noise" aria-hidden="true"></div>
   <div class="cinema-vignette" aria-hidden="true"></div>
 
   <!-- Bottom taskbar (hidden on hero, visible when scrolled) -->
   <header class="header taskbar hidden" id="nav">
     <div class="taskbar-inner">
-      <a href="#hero" class="header-logo">CJ</a>
+      <a href="#home" class="header-logo">CJ</a>
       <nav class="header-nav">
         <a href="#about" class="header-link">About</a>
         <a href="#experience" class="header-link">Experience</a>
@@ -35,14 +48,26 @@
 
   <main>
     <!-- Hero: full-bleed with background image -->
-    <section class="hero hero-premium" id="hero">
-      <div class="hero-bg-layer" aria-hidden="true"></div>
+    <section class="hero hero-premium" id="home">
+      <div class="hero-bg-layer" aria-hidden="true">
+        <canvas id="hero-matrix"></canvas>
+        <canvas id="hero-nodes"></canvas>
+      </div>
       <div class="hero-overlay" aria-hidden="true"></div>
       <div class="hero-inner">
         <div class="hero-inner-glow" aria-hidden="true"></div>
-        <p class="hero-label hero-float">AI / ML Engineer</p>
-        <h1 class="hero-name hero-float">Cyril Jose</h1>
-        <p class="hero-role hero-float"><span id="typewriter"></span><span class="cursor">|</span></p>
+        <p class="hero-label hero-float">
+          AI / ML Engineer
+          <span class="voice-visualizer">
+            <span class="voice-bar"></span><span class="voice-bar"></span><span class="voice-bar"></span><span class="voice-bar"></span><span class="voice-bar"></span>
+          </span>
+        </p>
+        <h1 class="hero-name hero-float staggered-reveal" aria-label="Cyril Jose">
+          <span>C</span><span>y</span><span>r</span><span>i</span><span>l</span><span>&nbsp;</span><span>J</span><span>o</span><span>s</span><span>e</span>
+        </h1>
+        <div class="hero-role hero-float" style="position: relative; height: 150px; width: 100%; display: flex; justify-content: center; align-items: center; margin-bottom: 1.25rem;">
+          <div id="hero-particles-container" style="position: absolute; width: 100%; height: 100%; pointer-events: none;"></div>
+        </div>
         <p class="hero-tagline hero-float">Deep Learning, NLP & Computer Vision — building systems that matter.</p>
         <div class="hero-cta hero-float">
           <a href="#projects" class="btn btn-hero btn-primary">View work</a>
@@ -57,13 +82,20 @@
 
     <!-- About: premium profile section -->
     <section class="block section about-section about-premium" id="about">
+      <div class="aurora-bg">
+        <div class="aurora-blob aurora-blob-1"></div>
+        <div class="aurora-blob aurora-blob-2"></div>
+      </div>
       <span class="block-num" aria-hidden="true">01</span>
       <div class="wrap">
         <div class="about-premium-container">
           <div class="about-premium-image reveal" data-reveal>
-            <div class="about-premium-img-frame">
-              <img src="public/img/my-profile-img.jpg" alt="Cyril Jose — AI & ML Engineer" class="about-premium-img" loading="lazy" />
-              <div class="about-premium-img-glow"></div>
+            <div class="about-avatar-ring-wrap">
+              <div class="about-avatar-ring" aria-hidden="true"></div>
+              <div class="about-premium-img-frame">
+                <img src="public/img/my-profile-img.jpg" alt="Cyril Jose — AI & ML Engineer" class="about-premium-img" loading="lazy" />
+                <div class="about-premium-img-glow"></div>
+              </div>
             </div>
             <div class="about-premium-badge">
               <i class="fas fa-microchip"></i>
@@ -73,7 +105,7 @@
           <div class="about-premium-content">
             <div class="about-premium-header">
               <p class="about-premium-label">About me</p>
-              <h2 class="about-premium-title">Building intelligent systems that matter</h2>
+              <h2 class="about-premium-title scramble-text">Building intelligent systems that matter</h2>
               <p class="about-premium-subtitle">AI Engineer & Machine Learning Enthusiast — turning ideas into production.</p>
             </div>
             <div class="about-premium-body">
@@ -83,7 +115,7 @@
                   <i class="fas fa-calendar-alt"></i>
                   <div>
                     <span class="info-label">Age</span>
-                    <span class="info-value">22</span>
+                    <span class="info-value">23</span>
                   </div>
                 </div>
                 <div class="about-premium-info-item">
@@ -115,9 +147,7 @@
                   </div>
                 </div>
               </div>
-              <div class="about-premium-highlight reveal" data-reveal>
-                <p>My work spans <strong>deepfake detection</strong>, <strong>real-time collision detection</strong>, and a growing focus on <strong>generative AI</strong> in healthcare and finance.</p>
-              </div>
+
               <div class="about-premium-contact reveal" data-reveal>
                 <a href="mailto:cyriljosecky@gmail.com" class="about-premium-email">
                   <i class="fas fa-envelope"></i>
@@ -130,18 +160,23 @@
       </div>
     </section>
 
-    <!-- Experience -->
-    <section class="block section experience-section experience-modern" id="experience">
+    <!-- Experience: Horizontal Scroll Journey -->
+    <section class="block section experience-section" id="experience">
       <span class="block-num" aria-hidden="true">02</span>
       <div class="wrap">
         <header class="experience-header">
-          <h2 class="block-title reveal" data-reveal>Experience</h2>
+          <h2 class="block-title scramble-text" data-reveal>Experience</h2>
           <p class="experience-subtitle reveal" data-reveal>Roles, research, and education in AI and Machine Learning</p>
         </header>
+      </div>
 
-        <div class="timeline-view" id="timelineView">
-          <div class="timeline-track" aria-hidden="true"></div>
-          <div class="timeline-list" id="experienceTimeline"></div>
+      <!-- Full-width sticky container for horizontal scroll -->
+      <div class="horizontal-scroll-container" id="experienceScrollContainer">
+        <div class="horizontal-scroll-sticky" id="experienceSticky">
+          <div class="timeline-view" id="timelineView">
+            <div class="timeline-track" aria-hidden="true"></div>
+            <div class="timeline-list" id="experienceTimeline"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -151,7 +186,7 @@
       <span class="block-num" aria-hidden="true">03</span>
       <div class="wrap">
         <header class="education-header">
-          <h2 class="block-title reveal" data-reveal>Education</h2>
+          <h2 class="block-title scramble-text" data-reveal>Education</h2>
           <p class="education-subtitle reveal" data-reveal>Academic background and key milestones</p>
         </header>
         <div class="education-grid" id="educationGrid"></div>
@@ -160,10 +195,14 @@
 
     <!-- Projects -->
     <section class="block section projects-section glass-section" id="projects">
+      <div class="aurora-bg">
+        <div class="aurora-blob aurora-blob-2"></div>
+        <div class="aurora-blob aurora-blob-3"></div>
+      </div>
       <span class="block-num" aria-hidden="true">04</span>
       <div class="wrap wrap-wide">
         <header class="projects-header">
-          <h2 class="block-title reveal" data-reveal>Featured projects</h2>
+          <h2 class="block-title scramble-text" data-reveal>Featured projects</h2>
           <p class="projects-subtitle reveal" data-reveal">AI solutions that push the boundaries of technology</p>
         </header>
         <div class="projects-container">
@@ -189,21 +228,25 @@
       <span class="block-num" aria-hidden="true">05</span>
       <div class="wrap">
         <header class="skills-header">
-          <h2 class="block-title reveal" data-reveal>Technical skills</h2>
+          <h2 class="block-title scramble-text" data-reveal>Technical skills</h2>
           <p class="block-desc reveal" data-reveal>AI and Machine Learning technologies</p>
         </header>
         <div class="skills-container">
           <div class="skills-category reveal" data-reveal>
             <div class="skills-category-header">
               <i class="fas fa-code"></i>
-              <h3 class="skills-category-title">Programming & Frameworks</h3>
+              <h3 class="skills-category-title">Programming &amp; Frameworks</h3>
             </div>
             <div class="skills-grid" id="technicalSkills"></div>
+          </div>
+          <div class="skills-particle-stage">
+            <div id="skills-particles-container" class="skills-particle-canvas"></div>
+            
           </div>
           <div class="skills-category reveal" data-reveal>
             <div class="skills-category-header">
               <i class="fas fa-cloud"></i>
-              <h3 class="skills-category-title">Cloud & Tools</h3>
+              <h3 class="skills-category-title">Cloud &amp; Tools</h3>
             </div>
             <div class="skills-grid" id="cloudSkills"></div>
           </div>
@@ -216,7 +259,7 @@
       <span class="block-num" aria-hidden="true">06</span>
       <div class="wrap">
         <header class="achievements-header">
-          <h2 class="block-title reveal" data-reveal>Achievements</h2>
+          <h2 class="block-title scramble-text" data-reveal>Achievements</h2>
           <p class="achievements-subtitle reveal" data-reveal>Recognition and contributions to the AI community</p>
         </header>
         <div class="achievements-stats-row" id="statsGrid"></div>
@@ -232,7 +275,7 @@
       <span class="block-num" aria-hidden="true">07</span>
       <div class="wrap">
         <header class="certs-header">
-          <h2 class="block-title reveal" data-reveal>Certifications</h2>
+          <h2 class="block-title scramble-text" data-reveal>Certifications</h2>
           <p class="certs-subtitle reveal" data-reveal>Professional certifications in AI and ML</p>
         </header>
         <div class="certs-cards-wrap">
@@ -247,7 +290,7 @@
       <span class="block-num" aria-hidden="true">08</span>
       <div class="wrap wrap-narrow">
         <header class="contact-header">
-          <h2 class="block-title reveal" data-reveal>Get in touch</h2>
+          <h2 class="block-title scramble-text" data-reveal>Get in touch</h2>
           <p class="contact-subtitle reveal" data-reveal>Let's collaborate on exciting AI projects</p>
         </header>
         <div class="contact-layout">
