@@ -83,7 +83,7 @@
     }
   ];
   const achievements = [
-    { icon: 'fas fa-trophy', title: 'Best Performer Award at Webfolks', description: 'Recognized as Best Performer at Webfolks for strong delivery, consistency, and impact in day-to-day development and automation work.', media: 'public/img/achievements/best-performer-award-webfolks.jpeg' },
+    { icon: 'fas fa-trophy', title: 'Best Performer Award at Webfolks (Jan 2026)', description: 'Recognized as Best Performer at Webfolks for strong delivery, consistency, and impact in day-to-day development and automation work.', media: 'public/img/achievements/best-performer-award-webfolks.jpeg' },
     { icon: 'fas fa-medal', title: 'Top Performer in AI Solutioning', description: 'Recognized as one of the top 6-15 performers out of 800+ applicants in the AI Solutioning assignment with ResoluteAI Software Private Limited.', media: 'public/img/achievements/ResoluteAI-Software-Private-Limitedachievement-1.jpg' },
     { icon: 'fas fa-code-branch', title: 'Open Source Contributor', description: 'Active contributor to machine learning projects on GitHub with multiple repositories and collaborations.', link: 'https://github.com/Cyriloo7?tab=repositories' },
     { icon: 'fas fa-graduation-cap', title: 'B.Tech Graduation', description: 'Proud to graduate from Vellore Institute of Technology (VIT) with a B.Tech in Computer Science and Engineering.', media: 'public/img/achievements/btech-graduation-achievement-2.jpg' },
